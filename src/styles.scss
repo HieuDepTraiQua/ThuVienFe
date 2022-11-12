@@ -1,0 +1,110 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+@import "~ng-zorro-antd/style/index.min.css"; /* Import base styles */
+@import "~ng-zorro-antd/button/style/index.min.css";  /* Import one component's styles */
+@import url("https://fonts.googleapis.com/css?family=Montserrat:500,700");
+$box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+$background-color: #fafafa;
+
+.input-label-custom {
+     color: #8E8E8E;
+    transform: translateY(20%);
+}
+
+.input-type-custom {
+        width: 70%;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        height: 35px;
+        text-indent: 10px;
+        box-shadow: $box-shadow;
+        background-color: $background-color;
+}
+
+.select-type-custom {
+    width: 66%;
+    height: 35px;
+    border-radius: 10px;
+}
+
+.ant-select:not(.ant-select-customize-input)  {
+    .ant-select-selector {
+        position: relative;
+        background-color: $background-color !important;
+        box-shadow: $box-shadow !important;
+        border: none !important;
+        border-radius: 10px !important;
+        transition: all .3s cubic-bezier(.645,.045,.355,1);
+        outline: none !important;
+        color: black !important;
+    }
+}
+
+.date-type-custom {
+    border: none;
+    outline: none !important;
+    background-color: $background-color !important;
+    border-radius: 10px !important;
+    box-shadow: $box-shadow;
+    height: 35px !important;
+}
+
+
+.ant-modal-content {
+    position: relative;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0;
+    border-radius: 2px;
+    pointer-events: auto;
+    border-radius: 20px !important;
+}
+
+.ant-modal-header {
+    border: none !important;
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-nodrop {
+    cursor: no-drop;
+}
+
+.button-custom-1 {
+    background-color: #52cf71;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 35px;
+    border-radius: 10px;
+}
+
+.button-custom-1:focus:not(:focus-visible) {
+    background-color: #071d0c;
+    color: white;
+}
+
+
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.text-error {
+    color: red;
+}
+
+
+

@@ -1,0 +1,68 @@
+<app-table-component [data]="customers"  
+                    *ngIf="!(isLoading$ | async)"
+                    (createButton)="showModal()"
+                    (rowClick)="onRowClick($event)" 
+                    (editButtonClick)="showModal($event)"
+                    (deleteButtonClick)="showDeleteConfirm($event)"
+                    [pageIndex]="pageIndex"
+                    [totalPage]="totalPage"
+                    (pageIndexChange)="onPageChange($event)"
+                    (pageSizeChange)="onPageSizeChange($event)">
+    <app-col-table header="name" key="name" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Họ và tên</div>
+    </ng-template>
+    </app-col-table>
+
+    <app-col-table header="address" key="address" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Địa chỉ</div>
+    </ng-template>
+    </app-col-table>
+    
+    <app-col-table header="libraryCard" key="libraryCard" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Thẻ thư viện</div>
+    </ng-template>
+    </app-col-table>
+
+</app-table-component> 
+
+<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+      (nzOnCancel)="handleCancel()"
+      [nzWidth]="600"
+      (nzOnOpenChange)="getAllCard()"
+
+    >
+      <ng-template #modalTitle>{{!isUpdate ? 'Tạo mới' : "Cập nhật"}}</ng-template>
+
+      <ng-template #modalContent>
+          <form [formGroup]="formGroup">
+            <div nz-row>
+                <div nz-col nzSpan="8" class="input-label-custom">Họ và tên</div>
+                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="name" placeholder="Nhập họ và tên"/>
+            </div>
+    
+            <div nz-row class="mt-4">
+                <div nz-col nzSpan="8" class="input-label-custom">Địa chỉ</div>
+                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="address" placeholder="Nhập địa chỉ" />
+            </div>
+            <div nz-row class="mt-4">
+                <div nz-col nzSpan="8" class="input-label-custom">Thẻ thư viện</div>
+                <nz-select formControlName="libraryCardId" class="select-type-custom" [nzPlaceHolder]="'Chọn thẻ thư viện'" (ngModelChange)="onCard()" >
+                  <nz-option *ngFor="let card of cards" [nzValue]="card.id" [nzLabel]="card.idCard"></nz-option>
+              </nz-select>
+            </div>
+          
+          </form>
+      </ng-template>
+
+      <ng-template #modalFooter>
+        <app-button-common [okButton]="false" style="margin-right: 10px" (clickButton)="handleCancel()">Cancel</app-button-common>
+        <app-button-common (clickButton)="handleOk()">Submit</app-button-common>
+      </ng-template>
+    </nz-modal>

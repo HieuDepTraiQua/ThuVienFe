@@ -1,0 +1,63 @@
+<div class="search-container">
+    <nz-input-group [nzPrefix]="prefixTemplateUser" class="custom-input" [style.visibility]="canSearch ? 'visible' : 'hidden'">
+        <input type="text" nz-input placeholder="Tìm kiếm" />
+    </nz-input-group>
+    <ng-template #prefixTemplateUser>
+        <img src="../../../assets/images/icon-search.png"  style="height: 15px;"/>
+    </ng-template>
+
+    <!-- <div class="button-custom" [style.visibility]="canFilter ? 'visible' : 'hidden'">
+        <button class="filter">
+            <img src="../../../assets/images/icon-filter.png"/> 
+            <span>Lọc</span>
+        </button>
+    </div> -->
+
+    <div class="button-custom" [style.visibility]="canCreate ? 'visible' : 'hidden'">
+        <button class="create" (click)="onCreate()"><img src="../../../assets/images/icon-create.png"  style="height: 10px;"/>Tạo mới</button>
+    </div>
+</div>
+
+<nz-table #dynamicTable [nzScroll]="{ x: scrollX, y: scrollY }" [nzData]="listOfData" [nzBordered]="bordered"
+    [nzLoading]="isLoading" [nzShowPagination]="false" (nzCurrentPageDataChange)="currentPageDataChange($event)"
+    [nzSize]="gridSize" class="custom-row-header">
+    <thead>
+        <tr class="custom-row-header">
+            <th *ngIf="checked" nzWidth="60px" [(nzChecked)]="allChecked" [nzLeft]="fixedColumn"
+                [nzIndeterminate]="indeterminate" (nzCheckedChange)="checkAll($event)" class="header-table-custom"></th>
+            <th *ngFor="let col of columns" [align]="col.align" class="header-table-custom">
+                <span *ngIf="!col.headerTemplate">{{col.key | capitalizeText}}</span>
+                <ng-container *ngIf="col.headerTemplate" [ngTemplateOutlet]="col.headerTemplate"
+                    [ngTemplateOutletContext]="{$implicit: col}">
+                </ng-container>
+            </th>
+            <th [nzRight]="fixedColumn" nzWidth="180px" nzAlign="center" class="header-table-custom" [style.visibility]="canAction ? 'visible' : 'hidden'" >Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of dynamicTable.data">
+            <tr (click)="onRowClick(data)" class="custom-font">
+                <td [nzLeft]="fixedColumn" *ngIf="checked" [(nzChecked)]="data.checked"
+                    (nzCheckedChange)="refreshStatus()"></td>
+                <td *ngFor="let col of columns" [align]="col.align">
+                    <span *ngIf="!col.cellTemplate">{{data[col.key]}}</span>
+                    <ng-container *ngIf="col.cellTemplate" [ngTemplateOutlet]="col.cellTemplate"
+                        [ngTemplateOutletContext]="{
+                        data: data,
+                        col: col
+                        }"></ng-container>
+                </td>
+                <td [nzRight]="fixedColumn" nzAlign="center" [style.visibility]="canAction ? 'visible' : 'hidden'">
+                    <img src="../../../assets/images/icon-edit.png" style="height: 18px;" *ngIf="showEdit" (click)="onEditRow(data)" class="cursor-pointer">
+                    <nz-divider nzType="vertical" *ngIf="showEdit && showDelete"></nz-divider>
+                    <img src="../../../assets/images/icon-delete.png" style="height: 18px;" *ngIf="showDelete" (click)="onDeleteRow(data)" class="cursor-pointer">
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</nz-table>
+
+<div class="mt-3" style="float: right;">
+    <nz-pagination [nzPageIndex]="pageIndex" [nzTotal]="totalPage" nzShowSizeChanger 
+        (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)"></nz-pagination>
+</div>

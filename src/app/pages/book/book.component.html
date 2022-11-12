@@ -1,0 +1,80 @@
+<app-table-component [data]="books"  
+                    *ngIf="!(isLoading$ | async)"
+                    (createButton)="showModal()"
+                    (editButtonClick)="showModal($event)"
+                    (deleteButtonClick)="showDeleteConfirm($event)"
+                    [pageIndex]="pageIndex"
+                    [totalPage]="totalPage"
+                    (pageIndexChange)="onPageChange($event)"
+                    (pageSizeChange)="onPageSizeChange($event)">
+    <app-col-table header="nameBook" key="nameBook" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Tên sách</div>
+    </ng-template>
+    </app-col-table>
+
+    <app-col-table header="authorName" key="authorName" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Tác giả</div>
+    </ng-template>
+    </app-col-table>
+
+    <app-col-table header="categoryTitle" key="categoryTitle" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Thể loại</div>
+    </ng-template>
+    </app-col-table>
+
+    <app-col-table header="publishYear" key="publishYear" align="left" type="text" width="100px">
+      <ng-template #headerTable let-col1>
+        <div >Năm xuất bản</div>
+    </ng-template>
+    </app-col-table>
+
+</app-table-component> 
+
+<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+      (nzOnCancel)="handleCancel()"
+      [nzWidth]="600"
+    >
+      <ng-template #modalTitle>{{!isUpdate ? 'Tạo mới' : "Cập nhật"}}</ng-template>
+
+      <ng-template #modalContent>
+          <form [formGroup]="formGroup">
+            <div nz-row>
+                <div nz-col nzSpan="8" class="input-label-custom">Tên sách</div>
+                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="nameBook" placeholder="Nhập tên sách"/>
+            </div>
+    
+            <div nz-row class="mt-4">
+                <div nz-col nzSpan="8" class="input-label-custom">Tác giả</div>
+                <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="authorId" /> -->
+                <nz-select formControlName="authorId" class="select-type-custom" [nzPlaceHolder]="'Chọn tác giả'" (ngModelChange)="onAuthor()" >
+                  <nz-option *ngFor="let author of authors" [nzValue]="author.id" [nzLabel]="author.name"></nz-option>
+              </nz-select>
+            </div>
+
+            <div nz-row class="mt-4">
+                <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
+                <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="categoryId" /> -->
+
+                <nz-select formControlName="categoryId" class="select-type-custom" [nzPlaceHolder]="'Chọn thể loại'" (ngModelChange)="onCategory()" >
+                  <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.title"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-row class="mt-4">
+                <div nz-col nzSpan="8" class="input-label-custom">Năm xuất bản</div>
+                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="publishYear" placeholder="Nhập năm xuất bản"/>
+            </div>
+          </form>
+      </ng-template>
+
+      <ng-template #modalFooter>
+        <app-button-common [okButton]="false" style="margin-right: 10px" (clickButton)="handleCancel()">Thoát</app-button-common>
+        <app-button-common (clickButton)="handleOk()">Tạo mới</app-button-common>
+      </ng-template>
+    </nz-modal>

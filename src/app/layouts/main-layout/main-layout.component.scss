@@ -1,0 +1,183 @@
+$font-family: "Montserrat";
+
+nz-layout {
+
+  .logo {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .full-height {
+    min-height: 100vh;
+  }
+
+  nz-header {
+    background: #fff;
+    margin: 15px;
+    padding: 0;
+    border-radius: 10px;
+
+
+    .ant-layout-header .ant-menu {
+      line-height: inherit;
+      display: none;
+    }
+
+    .header-custom {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      align-items: center;
+      padding-left: 10px;
+  
+
+      .trigger {
+        font-size: 18px;
+        line-height: 64px;
+        padding: 0 24px;
+        cursor: pointer;
+        transition: color 0.3s;
+      
+      }
+      
+      .trigger:hover {
+        color: #e1ebe3;
+      }
+
+      .profile {
+        margin-left: auto;
+        padding-right: 30px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      
+        .avatar {
+          img {
+            height: 40px;
+          }
+        }
+
+        .user-info {
+          margin-right: 15px;
+          font-weight: 700;
+        }
+
+        .bell {
+          img {
+            height: 26px;
+          }
+        }
+
+        .setting {
+          padding-bottom: 4px;
+        }
+      }
+    }
+    
+  }
+  
+  nz-content {
+    margin: 0 16px;
+     min-height: 90%;
+
+    .inner-content {
+      padding: 24px;
+      background: #fff;
+       min-height: 90%;
+    }
+
+    .dashboard-content {
+      background: transparent ;
+      min-height: 90%;
+    }
+  }
+  
+  nz-breadcrumb {
+    margin: 16px 0;
+
+    .breadcum-custom {
+      color: #3d4e41;
+      font-family: $font-family;
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+
+  nz-footer {
+    text-align: center;
+  }
+
+  .menu-icon {
+    height: 18x;
+    width: 20px;
+  }
+
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #1da740;
+    color: white;
+    border-radius: 10px;
+    width: 80%;
+  }
+
+  .margin-content {
+    margin-left: 10px;
+  }
+
+  .custom-menu-text {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .custom-menu-item-text {
+    font-family: $font-family;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .sub-menu-custom {
+      font-family: $font-family ;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 6%;
+  }
+
+  .sub-menu-custom:hover {
+    .ant-menu-submenu-title:hover {
+      color: #1da740 !important;
+    }
+    font-family: $font-family ;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 6%;
+   
+}
+
+  .ant-menu-light  {
+    .ant-menu-item:hover {
+      color: #8ae4a0;
+     }
+  }
+
+  .ant-menu-inline .ant-menu-item-selected::after, .ant-menu-inline .ant-menu-selected::after {
+    border-right: none;
+  }
+}
+
+::ng-deep {
+  .ant-menu-light .ant-menu-submenu-title:hover {
+    color: #1da740;
+  }
+
+  .ant-menu-submenu-selected {
+    color: #1da740;
+}
+  .ant-menu-inline.ant-menu-root .ant-menu-submenu-title:hover {
+    color: #1da740;
+  }
+}
+
+
+
