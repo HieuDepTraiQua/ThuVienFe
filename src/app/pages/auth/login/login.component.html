@@ -14,7 +14,7 @@
       <div class="form-input" >
         <label class="form-title label-custom">Mật khẩu</label>
         <input class=" input-custom" type="password" autocomplete="new-password" formControlName="password" trimSpace (keyup.enter)="onSubmit()">
-        <span class="forgort-pasword"> Forgot password?</span>
+        <span class="forgort-pasword" style="cursor: pointer;"> Không có tài khoản? <span style="font-weight: 600;">Hãy liên hệ admin!</span> </span>
         <label nz-checkbox formControlName="checked" class="keep-me-singin">Ghi nhớ đăng nhập</label>
       </div>
   
@@ -24,6 +24,6 @@
     </div>
   
     <div class="right-side">
-        <img src="../../../../assets/images/library_bg.png">
+        <img src="../../../../assets/images/library_bg.png" style="padding-right: 20px">
     </div>
   </div>

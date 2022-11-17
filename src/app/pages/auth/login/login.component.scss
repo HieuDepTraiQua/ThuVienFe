@@ -8,8 +8,8 @@ $font-family: "Montserrat";
     position: absolute;
     top: 15%;
     left: 15%;
-    width: 55%;
-    height: 70%;
+    width: 70%;
+    height: 80%;
     min-height: 600px;
     background-color: #ffffff;
     opacity: 1;
@@ -26,10 +26,11 @@ $font-family: "Montserrat";
 
         .welcome-back-title {
             padding-top: 1%;
-            font-weight: 500;
+            font-weight: 700;
             font-size: 2.5rem;
-            color: white;
+            color: rgb(95, 95, 95);
             font-family: $font-family;
+
         }
 
         .form-input {
@@ -51,7 +52,7 @@ $font-family: "Montserrat";
                 padding-top: 4%;
                 font-weight: 500;
                 font-size: 13px;
-                color: #CCCCCC;
+                color: #939393;
                 font-family: $font-family;
                 align-self: flex-end
             };
@@ -61,7 +62,7 @@ $font-family: "Montserrat";
                 align-self: flex-start;
                 font-weight: 500;
                 font-size: 13px;
-                color: #CCCCCC;
+                color: #939393;
                 font-family: $font-family;
             }
         }
@@ -70,13 +71,13 @@ $font-family: "Montserrat";
             height: 46px;
             border: none;
             border-radius: 10px;
-            background-color: #515151;
-            color: white;
-            font-weight: 600;
+            background-color: #ffffff;
+            color: #939393;
+            font-weight: 400;
             font-size: 15px;
             text-indent: 10px;
             outline: none;
-            box-shadow: -5px 8px 10px rgba(0, 0, 0, 0.25);
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px 0px, rgba(0, 0, 0, 0.24) 0px 1px 2px 0px;
             font-family: $font-family;
         }
 
@@ -87,7 +88,7 @@ $font-family: "Montserrat";
             font-size: 14px;
             line-height: 30px;
             color: #939393;
-            text-indent: 10px;     
+            text-indent: 10px;
         }
 
         .login-button {
@@ -101,7 +102,7 @@ $font-family: "Montserrat";
             .button-custom {
                 width: 30%;
                 height: 40px;
-                background-color: #1da740;
+                background-color: $color;
                 border: none;
                 border-radius: 10px;
                 color: white;

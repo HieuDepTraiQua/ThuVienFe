@@ -1,4 +1,5 @@
 $font-family: "Montserrat";
+@import "../../../styles.scss";
 
 .header-table-custom {
     background-color: #F9F9FB;
@@ -50,7 +51,7 @@ $font-family: "Montserrat";
 
         .filter {
             background-color: white;
-            color: #1da740;
+            color: $color;
             font-weight: 600;
             display: flex;
             justify-content: center;
@@ -64,7 +65,7 @@ $font-family: "Montserrat";
 
         .export {
             background-color: white;
-            color: #1da740;
+            color: $color;
             font-weight: 600;
 
             display: flex;
@@ -78,7 +79,7 @@ $font-family: "Montserrat";
         }
 
         .create {
-            background-color: #1da740;
+            background-color: $color;
             color: white;
             font-weight: 600;
 
@@ -94,7 +95,7 @@ $font-family: "Montserrat";
         font-weight: 500;
         background: #fff;
         border-color: none !important;
-        background-color: #1da740 !important;
+        background-color: $color !important;
     }
     
     .ant-pagination-item-active a, .ant-pagination-item:focus-visible a, .ant-pagination-item:hover a {
@@ -109,7 +110,7 @@ $font-family: "Montserrat";
     .ant-pagination-item:hover {
         border: none !important;
        color: black !important;
-       background-color: #1da740 !important;
+       background-color: $color !important;
     }
 
     // .ant-select:not(.ant-select-customize-input) .ant-select-selector {

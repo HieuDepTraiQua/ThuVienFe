@@ -1,4 +1,5 @@
 $font-family: "Montserrat";
+$color: #2ea5e0;
 
 nz-layout {
 
@@ -115,7 +116,7 @@ nz-layout {
   }
 
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: #1da740;
+    background-color: #2ea5e0;
     color: white;
     border-radius: 10px;
     width: 80%;
@@ -146,7 +147,7 @@ nz-layout {
 
   .sub-menu-custom:hover {
     .ant-menu-submenu-title:hover {
-      color: #1da740 !important;
+      color: $color !important;
     }
     font-family: $font-family ;
     font-size: 14px;
@@ -157,7 +158,7 @@ nz-layout {
 
   .ant-menu-light  {
     .ant-menu-item:hover {
-      color: #8ae4a0;
+      color: #99c4d9;
      }
   }
 
@@ -168,14 +169,14 @@ nz-layout {
 
 ::ng-deep {
   .ant-menu-light .ant-menu-submenu-title:hover {
-    color: #1da740;
+    color: $color;
   }
 
   .ant-menu-submenu-selected {
-    color: #1da740;
+    color: $color;
 }
   .ant-menu-inline.ant-menu-root .ant-menu-submenu-title:hover {
-    color: #1da740;
+    color: $color;
   }
 }
 
