@@ -1,0 +1,29 @@
+<div class="bg-login pt-5">
+    <div class="left-side" [formGroup]="loginForm">
+      <img src="../../../../assets/images/logo.png" style="width: 20%;">
+      
+      <div class="welcome-back-title">
+        Thư Viện Số
+      </div>
+  
+      <div class="form-input">
+        <label class="username-title label-custom">Tên đăng nhập</label>
+        <input class="username-input input-custom" type="text" autocomplete="off" formControlName="username" trimSpace [autofocus]="true" (keyup.enter)="onSubmit()">
+      </div>
+  
+      <div class="form-input" >
+        <label class="form-title label-custom">Mật khẩu</label>
+        <input class=" input-custom" type="password" autocomplete="new-password" formControlName="password" trimSpace (keyup.enter)="onSubmit()">
+        <span class="forgort-pasword"> Forgot password?</span>
+        <label nz-checkbox formControlName="checked" class="keep-me-singin">Ghi nhớ đăng nhập</label>
+      </div>
+  
+      <div class="login-button">
+        <button  nz-button class="button-custom" (click)="onSubmit()" [nzLoading]="isSpinning">Đăng nhập</button>
+      </div>  
+    </div>
+  
+    <div class="right-side">
+        <img src="../../../../assets/images/library_bg.png">
+    </div>
+  </div>

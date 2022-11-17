@@ -10,7 +10,7 @@ import { TokenStorageService } from "src/app/_services/token-storage.service";
 export class MainLayoutComponent implements OnInit {
     isCollapsed = false;
     isDashboard = true;
-    parentBreadcum: string = "Dashboard";
+    parentBreadcum: string = "Book";
     childBreadcum: string = "";
     accountRole?: string;
 
@@ -18,7 +18,7 @@ export class MainLayoutComponent implements OnInit {
         private tokenService: TokenStorageService) {
             router.events.subscribe((val) => {
                 if (val instanceof NavigationStart) {
-                   this.isDashboard = (val.url == '/dashboard') ? true : false; 
+                   this.isDashboard = (val.url == '/book') ? true : false; 
                    if (val && val.url) {
                     const trimFirst = val.url.substring(1)
                     this.parentBreadcum = trimFirst[0].toUpperCase() + trimFirst.substr(1).toLowerCase();   

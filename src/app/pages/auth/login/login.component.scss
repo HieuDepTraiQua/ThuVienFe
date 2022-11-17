@@ -1,0 +1,161 @@
+$font-family: "Montserrat";
+@import "./../../../../styles.scss";
+
+.bg-login {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 55%;
+    height: 70%;
+    min-height: 600px;
+    background-color: #ffffff;
+    opacity: 1;
+    border-radius: 20px;
+    align-items: center ;
+    box-shadow:  rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+    .left-side {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        .welcome-back-title {
+            padding-top: 1%;
+            font-weight: 500;
+            font-size: 2.5rem;
+            color: white;
+            font-family: $font-family;
+        }
+
+        .form-input {
+            padding-top: 5%;
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            
+            .form-title {
+                align-self: flex-start;
+            }
+
+            .form-input {
+                align-self: flex-start;
+                width: 100%;
+            }
+
+            .forgort-pasword { 
+                padding-top: 4%;
+                font-weight: 500;
+                font-size: 13px;
+                color: #CCCCCC;
+                font-family: $font-family;
+                align-self: flex-end
+            };
+
+            .keep-me-singin {
+                padding-top: 6%;
+                align-self: flex-start;
+                font-weight: 500;
+                font-size: 13px;
+                color: #CCCCCC;
+                font-family: $font-family;
+            }
+        }
+
+        .input-custom {
+            height: 46px;
+            border: none;
+            border-radius: 10px;
+            background-color: #515151;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            text-indent: 10px;
+            outline: none;
+            box-shadow: -5px 8px 10px rgba(0, 0, 0, 0.25);
+            font-family: $font-family;
+        }
+
+        .label-custom {
+            font-family: $font-family;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 30px;
+            color: #939393;
+            text-indent: 10px;     
+        }
+
+        .login-button {
+            padding-top: 6%;
+            align-self: center;
+            width: 100%;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+
+            .button-custom {
+                width: 30%;
+                height: 40px;
+                background-color: #1da740;
+                border: none;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+            }
+        }
+
+        .signup-button {
+            padding-top: 6%;
+            align-self: center;
+            width: 100%;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+
+            .button-custom {
+                width: 30%;
+                height: 40px;
+                background-color: #668a6f;
+                border: none;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+            }
+        }
+
+        .question-signup {
+            color: #939393;
+            font-family: $font-family;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .sign-up {
+            color: white;
+            font-family: $font-family;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+    }
+
+    .right-side {
+        width: 55%;
+        position: absolute;
+        top: 2px;
+        left: 45%;
+
+        img {
+            height: 69.5vh;
+            min-height: 600px;
+            width: 100%;
+            border: 10px;
+        }
+    }
+}

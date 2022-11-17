@@ -11,7 +11,20 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/author',
+    redirectTo: '/book',
+  },
+  {
+    path: '',
+    component: AuthRoutesComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./pages/auth/auth.module').then(
+            (m) => m.AuthModule
+          ),
+      },
+    ],
   },
   {
     path: '',

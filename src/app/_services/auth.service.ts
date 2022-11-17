@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_URL } from '../utils/const';
-import { ThaiPhuDangKy } from '../models/dangkythaiphu.model';
+import { API_GENERAL, API_URL, } from '../utils/const';
 
-const AUTH_API = API_URL + "auth";
+const AUTH_API = API_GENERAL   + "auth";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,9 +20,5 @@ export class AuthService {
       username,
       password
     }, httpOptions);
-  }
-
-  register(thaiPhuDangKy: ThaiPhuDangKy): Observable<any> {
-    return this.http.post(AUTH_API + '/thaiphudangky', thaiPhuDangKy);
   }
 }
