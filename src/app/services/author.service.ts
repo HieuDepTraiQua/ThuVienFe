@@ -20,18 +20,18 @@ export class AuthorService {
   }
 
   getAllPaging(page: number, size: number): Observable<Author> {
-    return this.http.get<Author>(`${AUTHOR_URL}/get?page=${page}&size=${size}`);
+    return this.http.get<Author>(`${AUTHOR_URL}?page=${page}&size=${size}`);
   }
 
   create(author: Author): Observable<Author> {
-    return this.http.post<Author>(AUTHOR_URL + "/create", author);
+    return this.http.post<Author>(AUTHOR_URL, author);
   }
 
   update(author: Author, id: string): Observable<Author> {
-    return this.http.put<Author>(`${AUTHOR_URL}/update/${id}`, author);
+    return this.http.put<Author>(`${AUTHOR_URL}/${id}`, author);
   }
 
   delete(id: string): Observable<Author> {
-    return this.http.delete<Author>(`${AUTHOR_URL}/delete/${id}`);
+    return this.http.delete<Author>(`${AUTHOR_URL}/${id}`);
   }
 }

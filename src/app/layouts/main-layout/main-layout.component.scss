@@ -118,7 +118,7 @@ nz-layout {
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background-color: #2ea5e0;
     color: white;
-    border-radius: 10px;
+    border-radius: 0 10px 10px 0 ;
     width: 80%;
   }
 

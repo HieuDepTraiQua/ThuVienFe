@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BehaviorSubject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-category',
@@ -25,7 +26,8 @@ export class CategoryComponent implements OnInit {
   constructor(
     private categoryService: CategoryService ,
     private fb: FormBuilder,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private toastrService: ToastrService
   ) { 
     this.formGroup = this.fb.group({
       title: ['', [Validators.required]]
@@ -63,8 +65,13 @@ export class CategoryComponent implements OnInit {
   onDelete(data: Category): void {
     this.categoryService.delete(data.id)
         .pipe(finalize(() => this.isVisible = false))
-        .subscribe(response => {
-          this.getAllCategory();
+        .subscribe((response: any) => {
+          if (response && response.success === true){
+            this.getAllCategory();
+            this.toastrService.success("Xóa dữ liệu", "Thành công")
+          } else {
+            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+          }
       });
   }
   
@@ -95,14 +102,25 @@ export class CategoryComponent implements OnInit {
     if (this.isUpdate) {
       this.categoryService.update(category, this.selectedCategory.id)
         .pipe(finalize(() => this.isVisible = false))
-        .subscribe(response => {
-          this.getAllCategory();
+        .subscribe((response: any)  => {
+          if (response && response.success === true){
+            this.getAllCategory();
+            this.toastrService.success("Cập nhật dữ liệu", "Thành công")
+          } else {
+            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+          }
       });
     } else {
       this.categoryService.create(category)
         .pipe(finalize(() => this.isVisible = false))
-        .subscribe(response => {
-          this.getAllCategory();
+        .subscribe((response: any)  => {
+          if (response && response.success === true){
+            this.toastrService.success("Tạo mới dữ liệu", "Thành công")
+            this.getAllCategory();
+          } else {
+            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+          }
+
         });
     }  
   }

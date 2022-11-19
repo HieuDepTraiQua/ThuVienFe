@@ -1,80 +1,188 @@
-<app-table-component [data]="books"  
-                    *ngIf="!(isLoading$ | async)"
-                    (createButton)="showModal()"
-                    (editButtonClick)="showModal($event)"
-                    (deleteButtonClick)="showDeleteConfirm($event)"
-                    [pageIndex]="pageIndex"
-                    [totalPage]="totalPage"
-                    (pageIndexChange)="onPageChange($event)"
-                    (pageSizeChange)="onPageSizeChange($event)">
-    <app-col-table header="nameBook" key="nameBook" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Tên sách</div>
+<app-table-component
+  [data]="books"
+  *ngIf="!(isLoading$ | async)"
+  (createButton)="showModal()"
+  (editButtonClick)="showModal($event)"
+  (deleteButtonClick)="showDeleteConfirm($event)"
+  [pageIndex]="pageIndex"
+  [totalPage]="totalPage"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+  [canAction] = "isAdmin ? true : false"
+  [canCreate] = "isAdmin ? true : false"
+  [canSearch] = "isAdmin ? true : false"
+>
+  <app-col-table
+    header="nameBook"
+    key="nameBook"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Tên sách</div>
     </ng-template>
-    </app-col-table>
+  </app-col-table>
 
-    <app-col-table header="authorName" key="authorName" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Tác giả</div>
+  <app-col-table
+    header="authorName"
+    key="authorName"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Tác giả</div>
     </ng-template>
-    </app-col-table>
+  </app-col-table>
 
-    <app-col-table header="categoryTitle" key="categoryTitle" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Thể loại</div>
+  <app-col-table
+    header="categoryTitle"
+    key="categoryTitle"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Thể loại</div>
     </ng-template>
-    </app-col-table>
+  </app-col-table>
 
-    <app-col-table header="publishYear" key="publishYear" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Năm xuất bản</div>
+  <app-col-table
+    header="publishYear"
+    key="publishYear"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Năm xuất bản</div>
     </ng-template>
-    </app-col-table>
-
-</app-table-component> 
+  </app-col-table>
+</app-table-component>
 
 <nz-modal
-      [(nzVisible)]="isVisible"
-      [nzTitle]="modalTitle"
-      [nzContent]="modalContent"
-      [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()"
-      [nzWidth]="600"
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>{{
+    !isUpdate ? "Tạo mới" : "Cập nhật"
+  }}</ng-template>
+  <ng-template #modalContent>
+      <form [formGroup]="formGroup">
+        <div nz-row>
+          <div nz-col nzSpan="8" class="input-label-custom">Tên sách</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="nameBook"
+            placeholder="Nhập tên sách"
+          />
+        </div>
+
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Tác giả</div>
+          <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="authorId" /> -->
+          <nz-select
+            formControlName="authorId"
+            class="select-type-custom"
+            [nzPlaceHolder]="'Chọn tác giả'"
+            (ngModelChange)="onAuthor()"
+          >
+            <nz-option
+              *ngFor="let author of authors"
+              [nzValue]="author.id"
+              [nzLabel]="author.name"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
+          <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="categoryId" /> -->
+
+          <nz-select
+            formControlName="categoryId"
+            class="select-type-custom"
+            [nzPlaceHolder]="'Chọn thể loại'"
+            (ngModelChange)="onCategory()"
+          >
+            <nz-option
+              *ngFor="let category of categories"
+              [nzValue]="category.id"
+              [nzLabel]="category.title"
+            ></nz-option>
+          </nz-select>
+        </div>
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Năm xuất bản</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="publishYear"
+            placeholder="Nhập năm xuất bản"
+          />
+        </div>
+      </form>
+    <!-- <div class="img-content">
+      <div class="row">
+        <div class="col-8">
+          <label class="btn btn-default p-0">
+            <input type="file" (change)="selectFile($event)" />
+          </label>
+        </div>
+      
+        <div class="col-4">
+          <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
+            Upload
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="currentFile" class="progress my-3">
+        <div
+          class="progress-bar progress-bar-info progress-bar-striped"
+          role="progressbar"
+          attr.aria-valuenow="{{ progress }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [ngStyle]="{ width: progress + '%' }"
+        >
+          {{ progress }}%
+        </div>
+      </div>
+      
+      <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
+      
+      <div class="card mt-3">
+        <div class="card-header">List of Files</div>
+        <ul
+          class="list-group list-group-flush"
+          *ngFor="let file of fileInfos | async"
+        >
+          <li class="list-group-item">
+            <a href="{{ file.url }}">{{ file.name }}</a>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <app-button-common
+      [okButton]="false"
+      style="margin-right: 10px"
+      (clickButton)="handleCancel()"
+      >Thoát</app-button-common
     >
-      <ng-template #modalTitle>{{!isUpdate ? 'Tạo mới' : "Cập nhật"}}</ng-template>
-
-      <ng-template #modalContent>
-          <form [formGroup]="formGroup">
-            <div nz-row>
-                <div nz-col nzSpan="8" class="input-label-custom">Tên sách</div>
-                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="nameBook" placeholder="Nhập tên sách"/>
-            </div>
-    
-            <div nz-row class="mt-4">
-                <div nz-col nzSpan="8" class="input-label-custom">Tác giả</div>
-                <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="authorId" /> -->
-                <nz-select formControlName="authorId" class="select-type-custom" [nzPlaceHolder]="'Chọn tác giả'" (ngModelChange)="onAuthor()" >
-                  <nz-option *ngFor="let author of authors" [nzValue]="author.id" [nzLabel]="author.name"></nz-option>
-              </nz-select>
-            </div>
-
-            <div nz-row class="mt-4">
-                <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
-                <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="categoryId" /> -->
-
-                <nz-select formControlName="categoryId" class="select-type-custom" [nzPlaceHolder]="'Chọn thể loại'" (ngModelChange)="onCategory()" >
-                  <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.title"></nz-option>
-              </nz-select>
-            </div>
-            <div nz-row class="mt-4">
-                <div nz-col nzSpan="8" class="input-label-custom">Năm xuất bản</div>
-                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="publishYear" placeholder="Nhập năm xuất bản"/>
-            </div>
-          </form>
-      </ng-template>
-
-      <ng-template #modalFooter>
-        <app-button-common [okButton]="false" style="margin-right: 10px" (clickButton)="handleCancel()">Thoát</app-button-common>
-        <app-button-common (clickButton)="handleOk()">Tạo mới</app-button-common>
-      </ng-template>
-    </nz-modal>
+    <app-button-common (clickButton)="handleOk()">Xác nhận</app-button-common>
+  </ng-template>
+</nz-modal>
