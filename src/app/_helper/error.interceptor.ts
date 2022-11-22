@@ -14,7 +14,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error && error.status == 401) {
-            this.router.navigateByUrl("loÏgin");
+            this.router.navigateByUrl("login");
           }
           return throwError(error);
         })

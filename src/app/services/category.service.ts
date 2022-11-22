@@ -20,18 +20,18 @@ export class CategoryService {
   }
 
   getAllPaging(page: number, size: number): Observable<Category> {
-    return this.http.get<Category>(`${CATEGORY_URL}/get?page=${page}&size=${size}`);
+    return this.http.get<Category>(`${CATEGORY_URL}?page=${page}&size=${size}`);
   }
 
   create(category: Category): Observable<Category> {
-    return this.http.post<Category>(CATEGORY_URL + "/create", category);
+    return this.http.post<Category>(CATEGORY_URL, category);
   }
 
   update(category: Category, id: string): Observable<Category> {
-    return this.http.put<Category>(`${CATEGORY_URL}/update/${id}`, category);
+    return this.http.put<Category>(`${CATEGORY_URL}/${id}`, category);
   }
 
   delete(id: string): Observable<Category> {
-    return this.http.delete<Category>(`${CATEGORY_URL}/delete/${id}`);
+    return this.http.delete<Category>(`${CATEGORY_URL}/${id}`);
   }
 }
