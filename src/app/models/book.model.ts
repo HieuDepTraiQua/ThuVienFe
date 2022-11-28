@@ -4,4 +4,5 @@ export class Book {
     authorId!: string; 
     categoryId!: string;
     publishYear!: string;
+    image?: string;
 }

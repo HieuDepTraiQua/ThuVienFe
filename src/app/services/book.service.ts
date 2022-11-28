@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Book } from 'src/app/models/book.model';
@@ -35,37 +35,45 @@ export class BookService {
     return this.http.delete<Book>(`${BOOK_URL}/${id}`);
   }
 
-  upload(file: File): Observable<Book> {
+  // upload(file: File): Observable<Book> {
+  //   const formData: FormData = new FormData();
+
+  //   formData.append('file', file);
+
+  //   // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
+  //   //   reportProgress: true,
+  //   //   responseType: 'json'
+  //   // });
+
+  //   return this.http.post<Book>(`${BOOK_URL}/upload`, formData, {
+  //     reportProgress: true,
+  //     responseType: 'json'
+  //   });
+  // }
+  // getFiles(): Observable<any> {
+  //   return this.http.get(`${BOOK_URL}/files`);
+  // }
+
+
+  upload(file: File, fileName: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
-    formData.append('file', file);
+    formData.append('files', file);
 
-    // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-    //   reportProgress: true,
-    //   responseType: 'json'
-    // });
-
-    return this.http.post<Book>(`${BOOK_URL}/upload`, formData, {
+    const req = new HttpRequest('POST', `${BOOK_URL}/uploads`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
-  }
-  getFiles(): Observable<any> {
-    return this.http.get(`${BOOK_URL}/files`);
+
+    return this.http.request(req);
   }
 
-  uploadImage(file: File): Observable<Book> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post<Book>(BOOK_URL + '/upload', formData);
-  }
-
-  uploadImage2(file: File): Observable<Book> {
-    const formData: FormData = new FormData();
-    formData.append('file', file);
-    return this.http.post<Book>(BOOK_URL + '/upload', formData, {
-      reportProgress: true,
-      responseType: 'json'
-    })
-  }
+  // uploadImage2(file: File): Observable<Book> {
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', file);
+  //   return this.http.post<Book>(BOOK_URL + '/upload', formData, {
+  //     reportProgress: true,
+  //     responseType: 'json'
+  //   })
+  // }
 }

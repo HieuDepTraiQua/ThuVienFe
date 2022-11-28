@@ -34,11 +34,9 @@ export class BookComponent implements OnInit {
   accountRole = '';
   isAdmin = false;
 
-  selectedFiles?: FileList;
-  currentFile?: File;
-  progress = 0;
-  message = '';
-  fileInfos?: Observable<any>;
+  selectedFiles?: any;
+  previews: string = "";
+  
   constructor(
     private bookService: BookService ,
     private authorService: AuthorService ,
@@ -52,7 +50,8 @@ export class BookComponent implements OnInit {
       nameBook: ['', [Validators.required]],
       authorId: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
-      publishYear: ['', [Validators.required]]
+      publishYear: ['', [Validators.required]],
+      image: [null],
     })
     this.accountRole = this.tokenService.getUser();
     if (this.accountRole === 'admin'){
@@ -65,7 +64,6 @@ export class BookComponent implements OnInit {
     this.getAllBook();
     this.getAllAuthor();
     this.getAllCategory();
-    this.fileInfos = this.bookService.getFiles();
   }
 
   getAllBook(): void {
@@ -146,7 +144,7 @@ export class BookComponent implements OnInit {
         .subscribe((response: any) => {
           if (response && response.success === true){
             this.getAllBook();
-            this.toastrService.success("Tạo mớit dữ liệu", "Thành công");
+            this.toastrService.success("Tạo mới dữ liệu", "Thành công");
           } else {
             this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
           }
@@ -217,41 +215,26 @@ export class BookComponent implements OnInit {
     this.selectedFiles = event.target.files;
   }
 
-  upload(): void {
-    this.progress = 0;
+  onFileSelected(e: any): void {
+    this.selectedFiles = e.target.files;
 
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-
-      if (file) {
-        this.currentFile = file;
-
-        this.bookService.upload(this.currentFile).subscribe(
-          (event: any) => {
-          
-              this.message = event.body.message;
-              this.fileInfos = this.bookService.getFiles();
-              console.log(this.message, "file info");
-              
-            
-          },
-          (err: any) => {
-            console.log(err);
-            this.progress = 0;
-
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
-            } else {
-              this.message = 'Could not upload the file!';
-            }
-
-            this.currentFile = undefined;
-          });
-
+    if (this.selectedFiles![0].type.startsWith("image")) {    
+      if (this.selectedFiles && this.selectedFiles[0]) {
+        this.bookService.upload(this.selectedFiles[0], this.selectedFiles[0].name).subscribe((res: any) => {
+          if (res && res.body && res.body.data) {
+            this.selectedBook.image = res.body.data;
+          }
+        });
+        const reader = new FileReader();
+  
+        reader.onload = (e: any) => {
+          this.previews = (e.target.result);
+        };
+  
+        reader.readAsDataURL(this.selectedFiles[0]);
       }
-
-      this.selectedFiles = undefined;
+    } else {
+      this.toastrService.error("File tải lên phải là ảnh!")
     }
   }
-
 }
