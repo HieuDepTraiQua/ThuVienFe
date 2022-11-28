@@ -34,4 +34,19 @@ export class BookService {
   delete(id: string): Observable<Book> {
     return this.http.delete<Book>(`${BOOK_URL}/delete/${id}`);
   }
+
+  uploadImage(file: File): Observable<Book> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Book>(BOOK_URL + '/upload', formData);
+  }
+
+  uploadImage2(file: File): Observable<Book> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Book>(BOOK_URL + '/upload', formData, {
+      reportProgress: true,
+      responseType: 'json'
+    })
+  }
 }
