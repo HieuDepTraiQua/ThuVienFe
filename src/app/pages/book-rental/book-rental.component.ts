@@ -50,7 +50,7 @@ export class BookRentalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllBookRental();
-    this.getAllBook();
+    // this.getAllBook();
     this.getAllCard();
     this.getAllStaff();
   }
@@ -183,20 +183,20 @@ export class BookRentalComponent implements OnInit {
     this.getAllStaff();
   }
 
-  getAllBook(): void {
-    this.bookService.getAll()
-      .pipe(finalize(() => this.isLoading$.next(false)))
-      .subscribe((response: any) => {
-        if(response && response.success){
-          this.books = response.data;
-        }else{
-          console.log('Error!');
-        }
-      });
-  }
+  // getAllBook(): void {
+  //   this.bookService.getAll()
+  //     .pipe(finalize(() => this.isLoading$.next(false)))
+  //     .subscribe((response: any) => {
+  //       if(response && response.success){
+  //         this.books = response.data;
+  //       }else{
+  //         console.log('Error!');
+  //       }
+  //     });
+  // }
 
-  onBook(): void {
-    this.getAllBook();
-  }
+  // onBook(): void {
+  //   this.getAllBook();
+  // }
 
 }

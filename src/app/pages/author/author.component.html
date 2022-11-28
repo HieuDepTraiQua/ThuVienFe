@@ -1,52 +1,86 @@
-<app-table-component [data]="authors"  
-                    *ngIf="!(isLoading$ | async)"
-                    (rowClick)="onRowClick($event)" 
-                    (createButton)="showModal()"
-                    (editButtonClick)="showModal($event)"
-                    (deleteButtonClick)="showDeleteConfirm($event)"
-                    [pageIndex]="pageIndex"
-                    [totalPage]="totalPage"
-                    (pageIndexChange)="onPageChange($event)"
-                    (pageSizeChange)="onPageSizeChange($event)">
-    <app-col-table header="name" key="name" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-          <div>Tên tác giả</div>
-      </ng-template>
-    </app-col-table>
-    <app-col-table header="note" key="note" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Ghi chú</div>
+<app-table-component
+  [data]="authors"
+  *ngIf="!(isLoading$ | async)"
+  (rowClick)="onRowClick($event)"
+  (createButton)="showModal()"
+  (editButtonClick)="showModal($event)"
+  (deleteButtonClick)="showDeleteConfirm($event)"
+  [pageIndex]="pageIndex"
+  [totalPage]="totalPage"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+  <app-col-table
+    header="name"
+    key="name"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Tên tác giả</div>
     </ng-template>
-    </app-col-table>
-
-</app-table-component> 
+  </app-col-table>
+  <app-col-table
+    header="note"
+    key="note"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Ghi chú</div>
+    </ng-template>
+  </app-col-table>
+</app-table-component>
 
 <nz-modal
-      [(nzVisible)]="isVisible"
-      [nzTitle]="modalTitle"
-      [nzContent]="modalContent"
-      [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()"
-      [nzWidth]="600"
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>{{
+    !isUpdate ? "Tạo mới" : "Cập nhật"
+  }}</ng-template>
+
+  <ng-template #modalContent>
+    <form [formGroup]="formGroup">
+      <div nz-row>
+        <div nz-col nzSpan="8" class="input-label-custom">Họ và tên</div>
+        <input
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="name"
+          placeholder="Nhập tên tác giả"
+        />
+      </div>
+
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Ghi chú</div>
+        <input
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="note"
+          placeholder="Nhập ghi chú"
+        />
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <app-button-common
+      [okButton]="false"
+      style="margin-right: 10px"
+      (clickButton)="handleCancel()"
+      >Thoát</app-button-common
     >
-      <ng-template #modalTitle>{{!isUpdate ? 'Tạo mới' : "Cập nhật"}}</ng-template>
-
-      <ng-template #modalContent>
-          <form [formGroup]="formGroup">
-            <div nz-row>
-                <div nz-col nzSpan="8" class="input-label-custom">Họ và tên</div>
-                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="name" placeholder="Nhập tên tác giả" />
-            </div>
-    
-            <div nz-row class="mt-4">
-                <div nz-col nzSpan="8" class="input-label-custom">Ghi chú</div>
-                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="note" placeholder="Nhập ghi chú" />
-            </div>
-          </form>
-      </ng-template>
-
-      <ng-template #modalFooter>
-        <app-button-common [okButton]="false" style="margin-right: 10px" (clickButton)="handleCancel()">Thoát</app-button-common>
-        <app-button-common (clickButton)="handleOk()">Tạo mới</app-button-common>
-      </ng-template>
-    </nz-modal>
+    <app-button-common (clickButton)="handleOk()">Xác nhận</app-button-common>
+  </ng-template>
+</nz-modal>

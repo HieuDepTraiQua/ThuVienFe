@@ -10,50 +10,47 @@
 
     <ul nz-menu nzMode="inline">
       <li nz-menu-item [nzSelected]="isSelected('/author')" routerLink="/author" routerLinkActive="active" 
-        class="mt-2">
+        class="mt-2" *ngIf = "isAdmin">
         <img src="../../../assets/images/author.png" class="menu-icon" *ngIf="!isSelected('/author')">
         <img src="../../../assets/images/author2.png" class="menu-icon" *ngIf="isSelected('/author')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Tác giả</span>
       </li>
       <li nz-menu-item [nzSelected]="isSelected('/category')" routerLink="/category" routerLinkActive="active" 
-        class="mt-2">
+        class="mt-2" *ngIf = "isAdmin">
         <img src="../../../assets/images/category.png" class="menu-icon" *ngIf="!isSelected('/category')">
         <img src="../../../assets/images/category2.png" class="menu-icon" *ngIf="isSelected('/category')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Thể loại</span>
       </li>
-      <li nz-menu-item [nzSelected]="isSelected('/staff')" routerLink="/staff" routerLinkActive="active" 
-        class="mt-2">
+      <!-- <li nz-menu-item [nzSelected]="isSelected('/staff')" routerLink="/staff" routerLinkActive="active" 
+        class="mt-2" *ngIf = "isAdmin">
         <img src="../../../assets/images/staff.png" class="menu-icon" *ngIf="!isSelected('/staff')">
         <img src="../../../assets/images/staff2.png" class="menu-icon" *ngIf="isSelected('/staff')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Nhân viên</span>
-      </li>
-      <li nz-menu-item [nzSelected]="isSelected('/card')" routerLink="/card" routerLinkActive="active" 
-        class="mt-2">
+      </li> -->
+      <!-- <li nz-menu-item [nzSelected]="isSelected('/card')" routerLink="/card" routerLinkActive="active" 
+        class="mt-2" *ngIf = "isAdmin">
         <img src="../../../assets/images/menu-icon-my-page.png" class="menu-icon" *ngIf="!isSelected('/card')">
         <img src="../../../assets/images/menu-icon-my-page2.png" class="menu-icon" *ngIf="isSelected('/card')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Thẻ thư viện</span>
-      </li>
-      <li nz-menu-item [nzSelected]="isSelected('/customer')" routerLink="/customer" routerLinkActive="active" 
-        class="mt-2">
+      </li> -->
+      <!-- <li nz-menu-item [nzSelected]="isSelected('/customer')" routerLink="/customer" routerLinkActive="active" 
+        class="mt-2" *ngIf = "isAdmin">
         <img src="../../../assets/images/icon-people.png" class="menu-icon" *ngIf="!isSelected('/customer')">
         <img src="../../../assets/images/icon-people-white.png" class="menu-icon" *ngIf="isSelected('/customer')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Khách hàng</span>
-      </li>
+      </li> -->
       <li nz-menu-item [nzSelected]="isSelected('/book')" routerLink="/book" routerLinkActive="active" 
         class="mt-2">
         <img src="../../../assets/images/book.png" class="menu-icon" *ngIf="!isSelected('/book')">
         <img src="../../../assets/images/book2.png" class="menu-icon" *ngIf="isSelected('/book')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Sách</span>
       </li>
-      <li nz-menu-item [nzSelected]="isSelected('/rental')" routerLink="/rental" routerLinkActive="active" 
-        class="mt-2">
+      <!-- <li nz-menu-item [nzSelected]="isSelected('/rental')" routerLink="/rental" routerLinkActive="active" 
+        class="mt-2" *ngIf = "isAdmin">
         <img src="../../../assets/images/rental.png" class="menu-icon" *ngIf="!isSelected('/rental')">
         <img src="../../../assets/images/rental2.png" class="menu-icon" *ngIf="isSelected('/rental')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Mượn sách</span>
-      </li>
-
-    
-
+      </li> -->
     </ul>
 
   </nz-sider>

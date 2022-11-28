@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-author',
@@ -26,7 +27,8 @@ export class AuthorComponent implements OnInit {
   constructor(
     private authorService: AuthorService ,
     private fb: FormBuilder,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private toastrService: ToastrService
   ) { 
     this.formGroup = this.fb.group({
       name: ['', [Validators.required]],
@@ -61,8 +63,14 @@ export class AuthorComponent implements OnInit {
   onDelete(data: Author): void {
     this.authorService.delete(data.id)
         .pipe(finalize(() => this.isVisible = false))
-        .subscribe(response => {
-          this.getAllAuthor();
+        .subscribe((response: any) => {
+          if (response && response.success === true){
+            this.getAllAuthor();
+            this.toastrService.success("Xóa dữ liệu", "Thành công");
+          } else {
+            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+          }
+          
       });
   }
   
@@ -94,14 +102,25 @@ export class AuthorComponent implements OnInit {
     if (this.isUpdate) {
       this.authorService.update(author, this.selectedAuthor.id)
         .pipe(finalize(() => this.isVisible = false))
-        .subscribe(response => {
-          this.getAllAuthor();
+        .subscribe((response: any) => {
+          if (response && response.success === true){
+            this.getAllAuthor();
+            this.toastrService.success("Cập nhật dữ liệu", "Thành công")
+          } else {
+            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+          }
       });
     } else {
       this.authorService.create(author)
         .pipe(finalize(() => this.isVisible = false))
-        .subscribe(response => {
-          this.getAllAuthor();
+        .subscribe((response: any) => {
+          if (response && response.success === true){
+            this.getAllAuthor();
+            this.toastrService.success("Tạo mới dữ liệu", "Thành công")
+          }
+          else {
+            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+          }
         });
     }  
   }
