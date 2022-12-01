@@ -1,0 +1,177 @@
+<app-table-component
+  [data]="accounts"
+  *ngIf="!(isLoading$ | async)"
+  (createButton)="showModal()"
+  (editButtonClick)="showModal($event)"
+  (deleteButtonClick)="showDeleteConfirm($event)"
+  [pageIndex]="pageIndex"
+  [totalPage]="totalPage"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+  [canAction] = "isAdmin ? true : false"
+  [canCreate] = "isAdmin ? true : false"
+  [canSearch] = "isAdmin ? true : false"
+>
+  <app-col-table
+    header="username"
+    key="username"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Tên tài khoản</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="fullname"
+    key="fullname"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Họ và tên</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="phoneNumber"
+    key="phoneNumber"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Số điện thoại</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="address"
+    key="address"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Địa chỉ</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="roleTitle"
+    key="roleTitle"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Vai trò</div>
+    </ng-template>
+  </app-col-table>
+</app-table-component>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>{{
+    !isUpdate ? "Tạo mới" : "Cập nhật"
+  }}</ng-template>
+  <ng-template #modalContent>
+      <form [formGroup]="formGroup">
+        <div nz-row>
+          <div nz-col nzSpan="8" class="input-label-custom">User name</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="username"
+            placeholder="Nhập tên tài khoản"
+          />
+        </div>
+
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Họ và tên</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="fullname"
+            placeholder="Nhập họ và tên"
+          />
+        </div>
+
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Số điện thoại</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="phoneNumber"
+            placeholder="Nhập số điện thoại"
+            onlyNumber
+          />
+          <div class="text-error" style="padding-left: 185px"
+          *ngIf="(phoneControl.touched || phoneControl.dirty) && phoneControl.hasError('pattern')">Số
+          điện thoại không đúng định dạng</div>
+        </div>
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Địa chỉ</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="address"
+            placeholder="Nhập địa chỉ"
+          />
+        </div>
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Mật khẩu</div>
+          <input
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom"
+            formControlName="password"
+            placeholder="Nhập mật khẩu"
+          />
+        </div>
+        <div nz-row class="mt-4">
+          <div nz-col nzSpan="8" class="input-label-custom">Vai trò</div>
+          <nz-select
+            formControlName="roleId"
+            class="select-type-custom"
+            [nzPlaceHolder]="'Chọn vai trò'"
+            (ngModelChange)="getAllRole()"
+          >
+            <nz-option
+              *ngFor="let role of dataOfRole"
+              [nzValue]="role.id"
+              [nzLabel]="role.title"
+            ></nz-option>
+          </nz-select>
+        </div>
+      </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <app-button-common
+      [okButton]="false"
+      style="margin-right: 10px"
+      (clickButton)="handleCancel()"
+      >Thoát</app-button-common
+    >
+    <app-button-common (clickButton)="handleOk()">Xác nhận</app-button-common>
+  </ng-template>
+</nz-modal>

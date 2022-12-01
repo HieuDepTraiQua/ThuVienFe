@@ -35,7 +35,7 @@ export class BookComponent implements OnInit {
   isAdmin = false;
 
   selectedFiles?: any;
-  previews: string = "";
+  previews: any;
   
   constructor(
     private bookService: BookService ,
@@ -101,7 +101,14 @@ export class BookComponent implements OnInit {
   
   showModal(data?: Book): void {
     this.isVisible = true;
-  
+    // this.previews = data?.image;
+    // console.log(data, "data" );
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.previews = (e.target.result);
+    };
+    // reader.readAsDataURL(data?.image);
     if (data) {
       this.isUpdate = true;
       this.selectedBook = data;
@@ -217,21 +224,21 @@ export class BookComponent implements OnInit {
 
   onFileSelected(e: any): void {
     this.selectedFiles = e.target.files;
-
     if (this.selectedFiles![0].type.startsWith("image")) {    
       if (this.selectedFiles && this.selectedFiles[0]) {
         this.bookService.upload(this.selectedFiles[0], this.selectedFiles[0].name).subscribe((res: any) => {
           if (res && res.body && res.body.data) {
-            this.selectedBook.image = res.body.data;
+            this.formGroup.get("image")?.setValue(res.body.data);
+            
           }
         });
-        const reader = new FileReader();
-  
-        reader.onload = (e: any) => {
-          this.previews = (e.target.result);
-        };
-  
-        reader.readAsDataURL(this.selectedFiles[0]);
+        // const reader = new FileReader();
+        // reader.onload = (e: any) => {
+        //   this.previews = (e.target.result);
+        // };
+        // reader.readAsDataURL(this.selectedFiles[0]);
+        console.log(this.selectedFiles[0], "this.selectedFiles[0]");
+        
       }
     } else {
       this.toastrService.error("File tải lên phải là ảnh!")

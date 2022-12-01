@@ -30,7 +30,7 @@ export class BookService {
   update(book: Book, id: string): Observable<Book> {
     return this.http.put<Book>(`${BOOK_URL}/${id}`, book);
   }
-
+  
   delete(id: string): Observable<Book> {
     return this.http.delete<Book>(`${BOOK_URL}/${id}`);
   }
