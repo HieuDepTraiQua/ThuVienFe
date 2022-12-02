@@ -1,42 +1,64 @@
-<app-table-component [data]="categories"  
-                    *ngIf="!(isLoading$ | async)"
-                    (rowClick)="onRowClick($event)" 
-                    (createButton)="showModal()"
-                    (editButtonClick)="showModal($event)"
-                    (deleteButtonClick)="showDeleteConfirm($event)"
-                    [pageIndex]="pageIndex"
-                    [totalPage]="totalPage"
-                    (pageIndexChange)="onPageChange($event)"
-                    (pageSizeChange)="onPageSizeChange($event)">
-    <app-col-table header="title" key="title" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Thể loại</div>
+<app-table-component
+  [data]="categories"
+  *ngIf="!(isLoading$ | async)"
+  (rowClick)="onRowClick($event)"
+  (createButton)="showModal()"
+  (editButtonClick)="showModal($event)"
+  (deleteButtonClick)="showDeleteConfirm($event)"
+  [pageIndex]="pageIndex"
+  [totalPage]="totalPage"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+  [checked] = "false"
+>
+  <app-col-table
+    header="title"
+    key="title"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Thể loại</div>
     </ng-template>
-    </app-col-table>
-
-</app-table-component> 
+  </app-col-table>
+</app-table-component>
 
 <nz-modal
-      [(nzVisible)]="isVisible"
-      [nzTitle]="modalTitle"
-      [nzContent]="modalContent"
-      [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()"
-      [nzWidth]="600"
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>{{
+    !isUpdate ? "Tạo mới" : "Cập nhật"
+  }}</ng-template>
+
+  <ng-template #modalContent>
+    <form [formGroup]="formGroup">
+      <div nz-row>
+        <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
+        <input
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="title"
+          placeholder="Nhập thể loại"
+        />
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <app-button-common
+      [okButton]="false"
+      style="margin-right: 10px"
+      (clickButton)="handleCancel()"
+      >Thoát</app-button-common
     >
-      <ng-template #modalTitle>{{!isUpdate ? 'Tạo mới' : "Cập nhật"}}</ng-template>
-
-      <ng-template #modalContent>
-          <form [formGroup]="formGroup">
-            <div nz-row>
-                <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
-                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="title" placeholder="Nhập thể loại" />
-            </div>
-          </form>
-      </ng-template>
-
-      <ng-template #modalFooter>
-        <app-button-common [okButton]="false" style="margin-right: 10px" (clickButton)="handleCancel()">Thoát</app-button-common>
-        <app-button-common (clickButton)="handleOk()">Xác nhận</app-button-common>
-      </ng-template>
-    </nz-modal>
+    <app-button-common (clickButton)="handleOk()">Xác nhận</app-button-common>
+  </ng-template>
+</nz-modal>
