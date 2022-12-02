@@ -11,6 +11,7 @@
   [canAction] = "isAdmin ? true : false"
   [canCreate] = "isAdmin ? true : false"
   [canSearch] = "isAdmin ? true : false"
+  [checked] = "false"
 >
   <app-col-table
     header="username"
@@ -153,7 +154,6 @@
             formControlName="roleId"
             class="select-type-custom"
             [nzPlaceHolder]="'Chọn vai trò'"
-            (ngModelChange)="getAllRole()"
           >
             <nz-option
               *ngFor="let role of dataOfRole"

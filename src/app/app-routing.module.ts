@@ -9,11 +9,11 @@ import { MainRoutesComponent } from './routes/main.routes.component';
 import { AuthGuardService } from './_services/auth-guard.service';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   pathMatch: 'full',
-  //   redirectTo: '/book',
-  // },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '/login',
+  },
   {
     path: '',
     component: AuthRoutesComponent,

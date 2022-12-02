@@ -1,16 +1,17 @@
 <app-table-component
   [data]="books"
   *ngIf="!(isLoading$ | async)"
-  (createButton)="showModal()"
-  (editButtonClick)="showModal($event)"
+  (createButton)="showModal('create')"
+  (editButtonClick)="showModal('update', $event)"
   (deleteButtonClick)="showDeleteConfirm($event)"
   [pageIndex]="pageIndex"
   [totalPage]="totalPage"
   (pageIndexChange)="onPageChange($event)"
   (pageSizeChange)="onPageSizeChange($event)"
-  [canAction] = "isAdmin ? true : false"
-  [canCreate] = "isAdmin ? true : false"
-  [canSearch] = "isAdmin ? true : false"
+  [canAction]="isAdmin ? true : false"
+  [canCreate]="isAdmin ? true : false"
+  [canSearch]="isAdmin ? true : false"
+  [checked] = "false"
 >
   <app-col-table
     header="nameBook"
@@ -25,8 +26,8 @@
   </app-col-table>
 
   <app-col-table
-    header="authorName"
-    key="authorName"
+    header="author"
+    key="author"
     align="left"
     type="text"
     width="100px"
@@ -37,26 +38,21 @@
   </app-col-table>
 
   <app-col-table
-    header="categoryTitle"
-    key="categoryTitle"
+    header="image"
+    key="image"
     align="left"
     type="text"
     width="100px"
   >
     <ng-template #headerTable let-col1>
-      <div>Thể loại</div>
+      <div>Bìa sách</div>
     </ng-template>
-  </app-col-table>
 
-  <app-col-table
-    header="publishYear"
-    key="publishYear"
-    align="left"
-    type="text"
-    width="100px"
-  >
-    <ng-template #headerTable let-col1>
-      <div>Năm xuất bản</div>
+    <ng-template #cellTable let-data1="data" let-col="col">
+      <!-- <div>{{ <img [src] = "[col1.key]"> }}</div> -->
+      <div>
+        <img [src]="[data1[col.key]]" style="width: 150px; height: 200px" />
+      </div>
     </ng-template>
   </app-col-table>
 </app-table-component>
@@ -73,84 +69,126 @@
     !isUpdate ? "Tạo mới" : "Cập nhật"
   }}</ng-template>
   <ng-template #modalContent>
-      <form [formGroup]="formGroup">
-        <div nz-row>
-          <div nz-col nzSpan="8" class="input-label-custom">Tên sách</div>
-          <input
-            nz-col
-            nzSpan="16"
-            nz-input
-            class="input-type-custom"
-            formControlName="nameBook"
-            placeholder="Nhập tên sách"
-          />
-        </div>
-
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Tác giả</div>
-          <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="authorId" /> -->
-          <nz-select
-            formControlName="authorId"
-            class="select-type-custom"
-            [nzPlaceHolder]="'Chọn tác giả'"
-            (ngModelChange)="onAuthor()"
-          >
-            <nz-option
-              *ngFor="let author of authors"
-              [nzValue]="author.id"
-              [nzLabel]="author.name"
-            ></nz-option>
-          </nz-select>
-        </div>
-
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
-          <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="categoryId" /> -->
-
-          <nz-select
-            formControlName="categoryId"
-            class="select-type-custom"
-            [nzPlaceHolder]="'Chọn thể loại'"
-            (ngModelChange)="onCategory()"
-          >
-            <nz-option
-              *ngFor="let category of categories"
-              [nzValue]="category.id"
-              [nzLabel]="category.title"
-            ></nz-option>
-          </nz-select>
-        </div>
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Năm xuất bản</div>
-          <input
-            nz-col
-            nzSpan="16"
-            nz-input
-            class="input-type-custom"
-            formControlName="publishYear"
-            placeholder="Nhập năm xuất bản"
-          />
-        </div>
-      </form>
-    <div class="img-content">
-      <img
-          *ngIf="!previews"
-          class="profilepic__image"
-        />
+    <form [formGroup]="formGroup">
+      <div nz-row>
+        <div nz-col nzSpan="8" class="input-label-custom">Tên sách</div>
         <input
-          type="file"
-          class="file-input"
-          style="display: none"
-          (change)="onFileSelected($event)"
-          #fileUpload
-          accept="image/x-png,image/gif,image/jpeg"
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="nameBook"
+          placeholder="Nhập tên sách"
         />
+      </div>
 
-        <!-- <img *ngIf="previews" [src]="previews" class="profilepic__image" /> -->
-        <div class="profilepic__content" (click)="fileUpload.click()">
-          <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
-          <span class="profilepic__text">Upload ảnh</span>
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Tác giả</div>
+        <input
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="author"
+          placeholder="Nhập tên tác giả"
+        />
+      </div>
+
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Thể loại</div>
+        <!-- <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="categoryId" /> -->
+
+        <nz-select
+          formControlName="categoryId"
+          class="select-type-custom"
+          [nzPlaceHolder]="'Chọn thể loại'"
+          (ngModelChange)="onCategory()"
+        >
+          <nz-option
+            *ngFor="let category of categories"
+            [nzValue]="category.id"
+            [nzLabel]="category.title"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Ngày xuất bản</div>
+        <nz-date-picker
+        [nzPlaceHolder]="'Chọn ngày xuất bản'"
+        class="date-type-custom"
+        nzFormat="dd/MM/yyyy"
+        formControlName="publishYear"
+        style="width: 66%"
+      >
+      </nz-date-picker>
+      </div>
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Số trang</div>
+        <input
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="pageOfBook"
+          placeholder="Nhập số trang sách"
+          onlyNumber
+        />
+      </div>
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Mô tả về sách</div>
+        <textarea 
+          nz-col
+          nzSpan="16"
+          nz-input
+          rows="3"
+          class="input-type-custom-textarea"
+          formControlName="description"
+          placeholder="Nhập mô tả của sách"
+        ></textarea>
+      </div>
+      <div nz-row class="mt-4" *ngIf="showImage">
+        <div nz-col nzSpan="8" class="input-label-custom">Bìa sách</div>
+        <div style="padding-top: 15px">
+          <img
+            [src]="url"
+            style="width: 150px; height: 250px"
+            *ngIf="hideImage === false"
+          />
         </div>
+      </div>
+    </form>
+
+    <div
+      class="img-content"
+      style="
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        padding-top: 20px;
+      "
+    >
+      <img *ngIf="!previews" class="profilepic__image" />
+      <input
+        type="file"
+        class="file-input"
+        style="display: none"
+        (change)="onFileSelected($event)"
+        #fileUpload
+        accept="image/x-png,image/gif,image/jpeg"
+      />
+
+      <img
+        *ngIf="previews"
+        [src]="previews"
+        class="profilepic__image"
+        style="width: 150px; height: 250px"
+      />
+
+      <div class="profilepic__content" (click)="fileUpload.click()">
+        <a class="profilepic__icon"><i class="fas fa-camera"></i></a>
+        <a class="profilepic__text" style="padding-left: 15px">Chọn bìa sách</a>
+      </div>
     </div>
   </ng-template>
 

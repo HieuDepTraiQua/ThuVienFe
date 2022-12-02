@@ -16,10 +16,9 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
-  styleUrls: ['./book.component.scss']
+  styleUrls: ['./book.component.scss'],
 })
 export class BookComponent implements OnInit {
-
   formGroup!: FormGroup;
   books: Book[] = [];
   authors: Author[] = [];
@@ -36,132 +35,145 @@ export class BookComponent implements OnInit {
 
   selectedFiles?: any;
   previews: any;
-  
+  url: any;
+  showImage = true;
+  hideImage = false;
+
   constructor(
-    private bookService: BookService ,
-    private authorService: AuthorService ,
-    private categoryService: CategoryService ,
+    private bookService: BookService,
+    private authorService: AuthorService,
+    private categoryService: CategoryService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private toastrService: ToastrService,
-    private tokenService: TokenStorageService,
-  ) { 
+    private tokenService: TokenStorageService
+  ) {
     this.formGroup = this.fb.group({
       nameBook: ['', [Validators.required]],
-      authorId: ['', [Validators.required]],
+      author: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       publishYear: ['', [Validators.required]],
+      pageOfBook: ['', [Validators.required]],
+      description: [''],
       image: [null],
-    })
+    });
     this.accountRole = this.tokenService.getUser();
-    if (this.accountRole === 'admin'){
+    if (this.accountRole === 'admin') {
       this.isAdmin = true;
     }
-
   }
 
   ngOnInit(): void {
     this.getAllBook();
-    this.getAllAuthor();
-    this.getAllCategory();
   }
+
+  ngAfterViewInit(): void {}
 
   getAllBook(): void {
     this.isLoading$.next(true); // Hiển thị loading khi đang đang gửi request
-    this.bookService.getAllPaging(this.pageIndex-1, this.pageSize)
+    this.bookService
+      .getAllPaging(this.pageIndex - 1, this.pageSize)
       .pipe(finalize(() => this.isLoading$.next(false))) // Ẩn loading khi request gọi thành công
       .subscribe((response: any) => {
         if (response && response.success) {
           this.books = response.data;
-          this.totalPage = response.totalPage  * 10;
-          this.books = this.books.map(book => {
-           return {
-             ...book,
-             checked: false
-           }
-         });
+          this.totalPage = response.totalPage * 10;
+          this.books = this.books.map((book) => {
+            return {
+              ...book,
+              checked: false,
+            };
+          });
         } else {
           console.log('Xảy ra lỗi');
         }
-      })
+      });
   }
 
   onDelete(data: Book): void {
-    this.bookService.delete(data.id)
-        .pipe(finalize(() => this.isVisible = false))
-        .subscribe((response: any) => {
-          if (response && response.success === true){
-            this.getAllBook();
-            this.toastrService.success("Xóa dữ liệu", "Thành công");
-          } else {
-            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
-          }
+    this.bookService
+      .delete(data.id)
+      .pipe(finalize(() => (this.isVisible = false)))
+      .subscribe((response: any) => {
+        if (response && response.success === true) {
+          this.getAllBook();
+          this.toastrService.success('Xóa dữ liệu', 'Thành công');
+        } else {
+          this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
+        }
       });
   }
-  
-  showModal(data?: Book): void {
-    this.isVisible = true;
-    // this.previews = data?.image;
-    // console.log(data, "data" );
 
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.previews = (e.target.result);
-    };
-    // reader.readAsDataURL(data?.image);
+  showModal(type: string, data?: Book): void {
+    if (type === 'create'){
+      this.showImage = false;
+    }
+    if (type === 'update'){
+      this.showImage = true;
+    }
+    this.getAllAuthor();
+    this.getAllCategory();
+    this.isVisible = true;
     if (data) {
       this.isUpdate = true;
       this.selectedBook = data;
+      this.url = data.image;
       this.formGroup.patchValue({
         nameBook: data.nameBook,
-        authorId: data.authorId,
+        author: data.author,
         categoryId: data.categoryId,
         publishYear: data.publishYear,
-      })
+        pageOfBook: data.pageOfBook,
+        description: data.description
+      });
     } else {
-      this.isUpdate = false;
       this.formGroup.reset();
     }
   }
 
   handleOk(): void {
-
+    this.previews = '';
+    this.url ="";
+    this.hideImage = false;
     if (this.formGroup.invalid) {
       console.log(this.formGroup, 'form invalid');
       return;
     }
-    
+
     const book: Book = this.formGroup.getRawValue();
 
     if (this.isUpdate) {
-      this.bookService.update(book, this.selectedBook.id)
-        .pipe(finalize(() => this.isVisible = false))
+      this.bookService
+        .update(book, this.selectedBook.id)
+        .pipe(finalize(() => (this.isVisible = false)))
         .subscribe((response: any) => {
-          if (response && response.success === true){
+          if (response && response.success === true) {
             this.getAllBook();
-            this.toastrService.success("Cập nhật dữ liệu", "Thành công");
+            this.toastrService.success('Cập nhật dữ liệu', 'Thành công');
           } else {
-            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
+            this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
           }
-          
-      });
-    } else {
-      this.bookService.create(book)
-        .pipe(finalize(() => this.isVisible = false))
-        .subscribe((response: any) => {
-          if (response && response.success === true){
-            this.getAllBook();
-            this.toastrService.success("Tạo mới dữ liệu", "Thành công");
-          } else {
-            this.toastrService.error("Vui lòng thử lại", "Đã có lỗi xảy ra");
-          }
-          
         });
-    }  
+    } else {
+      this.bookService
+        .create(book)
+        .pipe(finalize(() => (this.isVisible = false)))
+        .subscribe((response: any) => {
+          if (response && response.success === true) {
+            this.getAllBook();
+            this.toastrService.success('Tạo mới dữ liệu', 'Thành công');
+          } else {
+            this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
+          }
+        });
+    }
   }
 
   handleCancel(): void {
     this.isVisible = false;
+    this.url = "";
+    this.previews = "";
+    this.hideImage = false;
   }
 
   showDeleteConfirm(data: Book): void {
@@ -172,13 +184,13 @@ export class BookComponent implements OnInit {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => this.onDelete(data),
-      nzCancelText: 'No'
+      nzCancelText: 'No',
     });
   }
 
   onPageChange(pageNumber: number): void {
     this.pageIndex = pageNumber;
-    this.getAllBook();    
+    this.getAllBook();
   }
 
   onPageSizeChange(pageSize: number): void {
@@ -187,12 +199,13 @@ export class BookComponent implements OnInit {
   }
 
   getAllCategory(): void {
-    this.categoryService.getAll()
+    this.categoryService
+      .getAll()
       .pipe(finalize(() => this.isLoading$.next(false)))
       .subscribe((response: any) => {
-        if(response && response.success){
+        if (response && response.success) {
           this.categories = response.data;
-        }else{
+        } else {
           console.log('Error!');
         }
       });
@@ -203,12 +216,13 @@ export class BookComponent implements OnInit {
   }
 
   getAllAuthor(): void {
-    this.authorService.getAll()
+    this.authorService
+      .getAll()
       .pipe(finalize(() => this.isLoading$.next(false)))
       .subscribe((response: any) => {
-        if(response && response.success){
+        if (response && response.success) {
           this.authors = response.data;
-        }else{
+        } else {
           console.log('Error!');
         }
       });
@@ -224,24 +238,24 @@ export class BookComponent implements OnInit {
 
   onFileSelected(e: any): void {
     this.selectedFiles = e.target.files;
-    if (this.selectedFiles![0].type.startsWith("image")) {    
+    if (this.selectedFiles![0].type.startsWith('image')) {
       if (this.selectedFiles && this.selectedFiles[0]) {
-        this.bookService.upload(this.selectedFiles[0], this.selectedFiles[0].name).subscribe((res: any) => {
-          if (res && res.body && res.body.data) {
-            this.formGroup.get("image")?.setValue(res.body.data);
-            
-          }
-        });
-        // const reader = new FileReader();
-        // reader.onload = (e: any) => {
-        //   this.previews = (e.target.result);
-        // };
-        // reader.readAsDataURL(this.selectedFiles[0]);
-        console.log(this.selectedFiles[0], "this.selectedFiles[0]");
-        
+        this.bookService
+          .upload(this.selectedFiles[0], this.selectedFiles[0].name)
+          .subscribe((res: any) => {
+            if (res && res.body && res.body.data) {
+              this.formGroup.get('image')?.setValue(res.body.data);
+              this.hideImage = true;
+            }
+          });
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previews = e.target.result;
+        };
+        reader.readAsDataURL(this.selectedFiles[0]);
       }
     } else {
-      this.toastrService.error("File tải lên phải là ảnh!")
+      this.toastrService.error('File tải lên phải là ảnh!');
     }
   }
 }

@@ -14,11 +14,7 @@ export class BookService {
   constructor(
     private http: HttpClient
   ) { }
-
-  // getAll(): Observable<Book> {
-  //   return this.http.get<Book>(BOOK_URL + "/getall");
-  // }
-
+  
   getAllPaging(page: number, size: number): Observable<Book> {
     return this.http.get<Book>(`${BOOK_URL}?page=${page}&size=${size}`);
   }
@@ -35,45 +31,16 @@ export class BookService {
     return this.http.delete<Book>(`${BOOK_URL}/${id}`);
   }
 
-  // upload(file: File): Observable<Book> {
-  //   const formData: FormData = new FormData();
-
-  //   formData.append('file', file);
-
-  //   // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-  //   //   reportProgress: true,
-  //   //   responseType: 'json'
-  //   // });
-
-  //   return this.http.post<Book>(`${BOOK_URL}/upload`, formData, {
-  //     reportProgress: true,
-  //     responseType: 'json'
-  //   });
-  // }
-  // getFiles(): Observable<any> {
-  //   return this.http.get(`${BOOK_URL}/files`);
-  // }
-
-
   upload(file: File, fileName: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
-    formData.append('files', file);
+    formData.append('file', file);
 
-    const req = new HttpRequest('POST', `${BOOK_URL}/uploads`, formData, {
+    const req = new HttpRequest('POST', `${BOOK_URL}/upload`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
 
     return this.http.request(req);
   }
-
-  // uploadImage2(file: File): Observable<Book> {
-  //   const formData: FormData = new FormData();
-  //   formData.append('file', file);
-  //   return this.http.post<Book>(BOOK_URL + '/upload', formData, {
-  //     reportProgress: true,
-  //     responseType: 'json'
-  //   })
-  // }
 }

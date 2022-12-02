@@ -57,7 +57,6 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllData();
-    this.getAllRole();
   }
 
   getAllData(): void {
@@ -90,6 +89,7 @@ export class AccountComponent implements OnInit {
   }
 
   showModal(data?: Account): void {
+    this.getAllRole();
     this.isVisible = true;
     if (data) {
       this.isUpdate = true;
