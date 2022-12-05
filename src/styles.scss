@@ -24,8 +24,19 @@ $color: #2ea5e0;
         background-color: $background-color;
 }
 
+.input-type-custom-2 {
+        width: 90%;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        height: 35px;
+        text-indent: 10px;
+        box-shadow: $box-shadow;
+        background-color: $background-color;
+}
+
 .input-type-custom-textarea {
-    width: 70%;
+    width: 95%;
     border: none;
     border-radius: 5px;
     outline: none;
@@ -37,6 +48,12 @@ $color: #2ea5e0;
 
 .select-type-custom {
     width: 66%;
+    height: 35px;
+    border-radius: 5px !important;
+}
+
+.select-type-custom-2 {
+    width: 90%;
     height: 35px;
     border-radius: 5px !important;
 }
@@ -117,6 +134,12 @@ $color: #2ea5e0;
 
 .text-error {
     color: red;
+}
+
+.book-content{
+    .ant-col{
+        max-width: 100%;
+    }
 }
 
 
