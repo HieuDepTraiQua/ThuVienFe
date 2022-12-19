@@ -20,6 +20,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 })
 export class BookComponent implements OnInit {
   formGroup!: FormGroup;
+  reviewFormGroup!: FormGroup;
   books: Book[] = [];
   authors: Author[] = [];
   categories: Category[] = [];
@@ -38,6 +39,8 @@ export class BookComponent implements OnInit {
   url: any;
   showImage = true;
   hideImage = false;
+  isVote = false;
+  modalTitle: any;
 
   constructor(
     private bookService: BookService,
@@ -57,10 +60,19 @@ export class BookComponent implements OnInit {
       description: [''],
       image: [null],
     });
+
+    this.reviewFormGroup = this.fb.group({
+      userId: [''],
+      vote: [''],
+      detail: [''],
+    });
+
     this.accountRole = this.tokenService.getUser();
     if (this.accountRole === 'admin') {
       this.isAdmin = true;
     }
+    console.log(this.tokenService.getUser(), "this.tokenService.getUser()");
+    
   }
 
   ngOnInit(): void {
@@ -105,11 +117,16 @@ export class BookComponent implements OnInit {
   }
 
   showModal(type: string, data?: Book): void {
-    if (type === 'create'){
+    if (type === 'create') {
       this.showImage = false;
+      this.modalTitle = 'Tạo mới sách';
     }
-    if (type === 'update'){
+    if (type === 'update') {
       this.showImage = true;
+      this.modalTitle = 'Cập nhật sách';
+    }
+    if (type === 'vote') {
+      this.modalTitle = 'Đánh giá sách';
     }
     this.getAllAuthor();
     this.getAllCategory();
@@ -124,16 +141,21 @@ export class BookComponent implements OnInit {
         categoryId: data.categoryId,
         publishYear: data.publishYear,
         pageOfBook: data.pageOfBook,
-        description: data.description
+        description: data.description,
       });
     } else {
       this.formGroup.reset();
     }
+    if (type === 'vote') {
+      console.log('loz');
+      this.isVote = true;
+    }
   }
 
   handleOk(): void {
+    this.isVote = false;
     this.previews = '';
-    this.url ="";
+    this.url = '';
     this.hideImage = false;
     if (this.formGroup.invalid) {
       console.log(this.formGroup, 'form invalid');
@@ -171,9 +193,10 @@ export class BookComponent implements OnInit {
 
   handleCancel(): void {
     this.isVisible = false;
-    this.url = "";
-    this.previews = "";
+    this.url = '';
+    this.previews = '';
     this.hideImage = false;
+    this.isVote = false;
   }
 
   showDeleteConfirm(data: Book): void {
@@ -257,5 +280,13 @@ export class BookComponent implements OnInit {
     } else {
       this.toastrService.error('File tải lên phải là ảnh!');
     }
+  }
+
+  tooltips = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+  value = 3;
+
+  submitVote(): void {
+    console.log("buoi");
+    
   }
 }

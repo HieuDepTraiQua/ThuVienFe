@@ -8,6 +8,12 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { SharedModule } from 'src/app/share/shared/shared.module';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzRateModule } from 'ng-zorro-antd/rate';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
 
 export const routes: Routes = [
   {
@@ -15,6 +21,11 @@ export const routes: Routes = [
     component: BookComponent,
   },
 ]
+
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
 @NgModule({
   declarations: [
@@ -29,7 +40,11 @@ export const routes: Routes = [
     NzSelectModule,
     NzDatePickerModule,
     SharedModule,
-    FormsModule
-  ]
+    FormsModule,
+    NzButtonModule,
+    NzRateModule
+  ],
+  bootstrap: [BookComponent],
+  providers: [ { provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons } ]
 })
 export class BookModule { }

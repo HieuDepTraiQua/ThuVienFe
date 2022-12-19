@@ -35,6 +35,7 @@ export class TableComponent implements OnInit, AfterContentInit {
   @Input() data: any[] = [];
   @Input() showEdit = true;
   @Input() showDelete = true;
+  @Input() showVote = false;
   @Input() canSearch = true;
   @Input() canFilter = true;
   @Input() canExport = true;
@@ -48,6 +49,7 @@ export class TableComponent implements OnInit, AfterContentInit {
   @Output() editButtonClick = new EventEmitter();
   @Output() deleteButtonClick = new EventEmitter();
   @Output() createButton = new EventEmitter();
+  @Output() voteButtonClick = new EventEmitter();
 
   @ContentChildren(ColTableComponent) columns!: QueryList<ColTableComponent>;
   @ContentChildren('headerTable', { descendants: true }) headerParentTmp!: QueryList<TemplateRef<any>>
@@ -78,6 +80,12 @@ export class TableComponent implements OnInit, AfterContentInit {
   onEditRow(data: any): void {
     if (this.editButtonClick) {
       this.editButtonClick.emit(data);
+    }  
+  }
+
+  onVote(data: any): void {
+    if (this.voteButtonClick) {
+      this.voteButtonClick.emit(data);
     }  
   }
 
