@@ -65,7 +65,7 @@
   [nzContent]="modalContent"
   [nzFooter]="modalFooter"
   (nzOnCancel)="handleCancel()"
-  [nzWidth]="1200"
+  [nzWidth]="modalWidth"
 >
   <ng-template #modalContent>
     <div *ngIf="isVote === false">
@@ -255,22 +255,23 @@
 
     <div *ngIf="isVote">
       <form [formGroup]="reviewFormGroup">
+        <div nz-row style="padding-bottom: 20px;">
+          <div nz-col nzSpan="8" class="input-label-custom">Đánh giá</div>
+          <nz-rate formControlName="vote" [(ngModel)]="vote"></nz-rate>
+          <span *ngIf="vote" class="ant-rate-text" style="display: flex; align-items: center;">{{
+            vote ? tooltips[vote - 1] : ""
+          }}</span>
+        </div>
         <div nz-row>
           <div nz-col nzSpan="8" class="input-label-custom">Chi tiết</div>
-          <input
+          <textarea
             nz-col
             nzSpan="16"
             nz-input
-            class="input-type-custom"
+            class="input-type-custom-textarea"
             formControlName="detail"
             placeholder="Nhập chi tiết đánh giá"
-          />
-        </div>
-        <div nz-row>
-          <nz-rate formControlName="vote"></nz-rate>
-          <span *ngIf="value" class="ant-rate-text">{{
-            value ? tooltips[value - 1] : ""
-          }}</span>
+          ></textarea>
         </div>
       </form>
     </div>
@@ -292,6 +293,8 @@
     >
       Đánh giá
     </button>
-    <app-button-common  (clickButton)="isVote ? submitVote() : handleOk()">Xác nhận</app-button-common>
+    <app-button-common (clickButton)="isVote ? submitVote() : handleOk()"
+      >Xác nhận</app-button-common
+    >
   </ng-template>
 </nz-modal>

@@ -12,6 +12,8 @@ import { CategoryService } from 'src/app/services/category.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { Review } from 'src/app/models/review.model';
+import { ReviewService } from 'src/app/services/review.service';
 
 @Component({
   selector: 'app-book',
@@ -41,6 +43,9 @@ export class BookComponent implements OnInit {
   hideImage = false;
   isVote = false;
   modalTitle: any;
+  modalWidth = 1200;
+  tooltips = ['Tệ kinh khủng', 'Không hay', 'Bình thường', 'Hay', 'Tuyệt vời'];
+  vote = 3;
 
   constructor(
     private bookService: BookService,
@@ -49,7 +54,8 @@ export class BookComponent implements OnInit {
     private fb: FormBuilder,
     private modal: NzModalService,
     private toastrService: ToastrService,
-    private tokenService: TokenStorageService
+    private tokenService: TokenStorageService,
+    private reviewService: ReviewService
   ) {
     this.formGroup = this.fb.group({
       nameBook: ['', [Validators.required]],
@@ -71,8 +77,7 @@ export class BookComponent implements OnInit {
     if (this.accountRole === 'admin') {
       this.isAdmin = true;
     }
-    console.log(this.tokenService.getUser(), "this.tokenService.getUser()");
-    
+    console.log(this.tokenService.getUser(), 'this.tokenService.getUser()');
   }
 
   ngOnInit(): void {
@@ -120,13 +125,16 @@ export class BookComponent implements OnInit {
     if (type === 'create') {
       this.showImage = false;
       this.modalTitle = 'Tạo mới sách';
+      this.modalWidth = 1200;
     }
     if (type === 'update') {
       this.showImage = true;
       this.modalTitle = 'Cập nhật sách';
+      this.modalWidth = 1200;
     }
     if (type === 'vote') {
       this.modalTitle = 'Đánh giá sách';
+      this.modalWidth = 600;
     }
     this.getAllAuthor();
     this.getAllCategory();
@@ -282,11 +290,18 @@ export class BookComponent implements OnInit {
     }
   }
 
-  tooltips = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
-  value = 3;
-
   submitVote(): void {
-    console.log("buoi");
-    
+    const review: Review = this.reviewFormGroup.getRawValue();    
+    this.reviewService
+      .create(review)
+      .pipe(finalize(() => (this.isVisible = false)))
+      .subscribe((response: any) => {
+        if (response && response.success === true) {
+          this.getAllBook();
+          this.toastrService.success('Thêm mới bình luận', 'Thành công');
+        } else {
+          this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
+        }
+      });
   }
 }
