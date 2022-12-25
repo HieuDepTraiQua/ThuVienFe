@@ -6,4 +6,5 @@ export class Account{
     phoneNumber? : string;
     address?: string;
     roleId?: string;
+    roleName?: string;
 }

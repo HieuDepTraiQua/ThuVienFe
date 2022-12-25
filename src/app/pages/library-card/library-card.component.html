@@ -1,72 +1,107 @@
-<app-table-component [data]="cards"  
-                    *ngIf="!(isLoading$ | async)"
-                    (createButton)="showModal()"
-                    (editButtonClick)="showModal($event)"
-                    (deleteButtonClick)="showDeleteConfirm($event)">
-    <app-col-table header="idCard" key="idCard" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Id thẻ</div>
+<app-table-component
+  [data]="cards"
+  *ngIf="!(isLoading$ | async)"
+  (createButton)="showModal()"
+  (editButtonClick)="showModal($event)"
+  (deleteButtonClick)="showDeleteConfirm($event)"
+>
+  <app-col-table
+    header="idCard"
+    key="idCard"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Id thẻ</div>
     </ng-template>
-    </app-col-table>
+  </app-col-table>
 
-    <app-col-table header="startDate" key="startDate" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Ngày bắt đầu</div>
+  <app-col-table
+    header="startDate"
+    key="startDate"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Ngày bắt đầu</div>
     </ng-template>
     <ng-template #colTable let-data let-col>
-      <div >{{data[col.key] | date: 'dd/MM/yyyy'}}</div>
+      <div>{{ data[col.key] | date : "dd/MM/yyyy" }}</div>
     </ng-template>
-    </app-col-table>
-    <app-col-table header="endDate" key="endDate" align="left" type="text" width="100px">
-      <ng-template #headerTable let-col1>
-        <div >Ngày kết thúc</div>
+  </app-col-table>
+  <app-col-table
+    header="endDate"
+    key="endDate"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Ngày kết thúc</div>
     </ng-template>
-    </app-col-table>
-
-</app-table-component> 
+  </app-col-table>
+</app-table-component>
 
 <nz-modal
-      [(nzVisible)]="isVisible"
-      [nzTitle]="modalTitle"
-      [nzContent]="modalContent"
-      [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()"
-      [nzWidth]="600"
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>{{
+    !isUpdate ? "Tạo mới" : "Cập nhật"
+  }}</ng-template>
+
+  <ng-template #modalContent>
+    <form [formGroup]="formGroup">
+      <div nz-row>
+        <div nz-col nzSpan="8" class="input-label-custom">Id thẻ</div>
+        <input
+          nz-col
+          nzSpan="16"
+          nz-input
+          class="input-type-custom"
+          formControlName="idCard"
+          placeholder="Nhập ID thẻ"
+        />
+      </div>
+
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Ngày bắt đầu</div>
+        <nz-date-picker
+          [nzPlaceHolder]="'Chọn ngày bắt đầu'"
+          class="date-type-custom"
+          nzFormat="dd/MM/yyyy"
+          formControlName="startDate"
+          style="width: 66%"
+        >
+        </nz-date-picker>
+      </div>
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Ngày kết thúc</div>
+        <nz-date-picker
+          [nzPlaceHolder]="'Chọn ngày kết thúc'"
+          class="date-type-custom"
+          nzFormat="dd/MM/yyyy"
+          formControlName="endDate"
+          style="width: 66%"
+        >
+        </nz-date-picker>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <app-button-common
+      [okButton]="false"
+      style="margin-right: 10px"
+      (clickButton)="handleCancel()"
+      >Thoát</app-button-common
     >
-      <ng-template #modalTitle>{{!isUpdate ? 'Tạo mới' : "Cập nhật"}}</ng-template>
-
-      <ng-template #modalContent>
-          <form [formGroup]="formGroup">
-            <div nz-row>
-                <div nz-col nzSpan="8" class="input-label-custom">Id thẻ</div>
-                <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="idCard" placeholder="Nhập ID thẻ"/>
-            </div>
-    
-            <div nz-row class="mt-4">
-                <div nz-col nzSpan="8" class="input-label-custom">Ngày bắt đầu</div>
-                <nz-date-picker 
-                [nzPlaceHolder]="'Chọn ngày bắt đầu'" 
-                class="date-type-custom"
-                nzFormat="dd/MM/yyyy"
-                formControlName="startDate"
-                style="width: 66%;" >
-            </nz-date-picker>
-            </div>
-            <div nz-row class="mt-4">
-                <div nz-col nzSpan="8" class="input-label-custom">Ngày kết thúc</div>
-                <nz-date-picker 
-                [nzPlaceHolder]="'Chọn ngày kết thúc'" 
-                class="date-type-custom"
-                nzFormat="dd/MM/yyyy"
-                formControlName="endDate"
-                style="width: 66%;" >
-            </nz-date-picker>
-            </div>
-          </form>
-      </ng-template>
-
-      <ng-template #modalFooter>
-        <app-button-common [okButton]="false" style="margin-right: 10px" (clickButton)="handleCancel()">Thoát</app-button-common>
-        <app-button-common (clickButton)="handleOk()">Tạo mới</app-button-common>
-      </ng-template>
-    </nz-modal>
+    <app-button-common (clickButton)="handleOk()">Tạo mới</app-button-common>
+  </ng-template>
+</nz-modal>

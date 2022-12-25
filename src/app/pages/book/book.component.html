@@ -40,6 +40,61 @@
   </app-col-table>
 
   <app-col-table
+    header="categoryTitle"
+    key="categoryTitle"
+    align="left"
+    type="text"
+    width="100px"
+    *ngIf = "isAdmin === true"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Thể loại</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="description"
+    key="description"
+    align="left"
+    type="text"
+    width="100px"
+    *ngIf = "isAdmin === true"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Mô tả</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="pageOfBook"
+    key="pageOfBook"
+    align="left"
+    type="text"
+    width="100px"
+    *ngIf = "isAdmin === true"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Số trang</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="publishYear"
+    key="publishYear"
+    align="left"
+    type="text"
+    width="100px"
+    *ngIf = "isAdmin === true"
+  >
+    <ng-template #headerTable >
+      <div>Ngày phát hành</div>
+    </ng-template>
+    <ng-template #colTable let-data let-col>
+      <div>{{data[col.key] | date: 'dd/MM/yyyy'}}</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
     header="image"
     key="image"
     align="left"
@@ -255,12 +310,15 @@
 
     <div *ngIf="isVote">
       <form [formGroup]="reviewFormGroup">
-        <div nz-row style="padding-bottom: 20px;">
+        <div nz-row style="padding-bottom: 20px">
           <div nz-col nzSpan="8" class="input-label-custom">Đánh giá</div>
           <nz-rate formControlName="vote" [(ngModel)]="vote"></nz-rate>
-          <span *ngIf="vote" class="ant-rate-text" style="display: flex; align-items: center;">{{
-            vote ? tooltips[vote - 1] : ""
-          }}</span>
+          <span
+            *ngIf="vote"
+            class="ant-rate-text"
+            style="display: flex; align-items: center"
+            >{{ vote ? tooltips[vote - 1] : "" }}</span
+          >
         </div>
         <div nz-row>
           <div nz-col nzSpan="8" class="input-label-custom">Chi tiết</div>
@@ -290,6 +348,7 @@
       style="margin-right: 15px"
       class="custom-button-default"
       *ngIf="isVote === false"
+      (click)="changeModalReview()"
     >
       Đánh giá
     </button>

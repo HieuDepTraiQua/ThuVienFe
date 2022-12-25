@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
+const USER_INFO_KEY = 'auth-user';
 
 @Injectable({
   providedIn: 'root'

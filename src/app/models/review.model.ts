@@ -3,4 +3,5 @@ export class Review {
     userId?: string;
     vote?: string;
     detail?: string;
+    bookName?: string;
 }

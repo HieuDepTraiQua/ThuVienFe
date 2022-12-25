@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Review } from 'src/app/models/review.model';
 import { ReviewService } from 'src/app/services/review.service';
+import { Account } from 'src/app/models/account.model';
 
 @Component({
   selector: 'app-book',
@@ -46,6 +47,7 @@ export class BookComponent implements OnInit {
   modalWidth = 1200;
   tooltips = ['Tệ kinh khủng', 'Không hay', 'Bình thường', 'Hay', 'Tuyệt vời'];
   vote = 3;
+  createReview?: Review;
 
   constructor(
     private bookService: BookService,
@@ -71,13 +73,13 @@ export class BookComponent implements OnInit {
       userId: [''],
       vote: [''],
       detail: [''],
+      bookName: ['']
     });
 
     this.accountRole = this.tokenService.getUser();
     if (this.accountRole === 'admin') {
       this.isAdmin = true;
     }
-    console.log(this.tokenService.getUser(), 'this.tokenService.getUser()');
   }
 
   ngOnInit(): void {
@@ -135,6 +137,8 @@ export class BookComponent implements OnInit {
     if (type === 'vote') {
       this.modalTitle = 'Đánh giá sách';
       this.modalWidth = 600;
+      this.reviewFormGroup.reset();
+      this.vote = 3;
     }
     this.getAllAuthor();
     this.getAllCategory();
@@ -155,7 +159,6 @@ export class BookComponent implements OnInit {
       this.formGroup.reset();
     }
     if (type === 'vote') {
-      console.log('loz');
       this.isVote = true;
     }
   }
@@ -291,7 +294,9 @@ export class BookComponent implements OnInit {
   }
 
   submitVote(): void {
-    const review: Review = this.reviewFormGroup.getRawValue();    
+    // const bookName = this.formGroup.get("nameBook")?.value;
+    const review: Review = this.reviewFormGroup.getRawValue();
+    // review.bookName = bookName;
     this.reviewService
       .create(review)
       .pipe(finalize(() => (this.isVisible = false)))
@@ -303,5 +308,17 @@ export class BookComponent implements OnInit {
           this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
         }
       });
+  }
+
+  changeModalReview(): void {
+    const bookName = this.formGroup.get("nameBook")?.value;
+    this.isVisible = false;
+    this.reviewFormGroup.setValue({
+      bookName: bookName,
+      userId: '',
+      vote: '',
+      detail: ''
+    });
+    this.showModal('vote');    
   }
 }
