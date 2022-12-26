@@ -7,4 +7,6 @@ export class Book {
     image?: string;
     pageOfBook?: string;
     description?: string;
+    price?: string;
+    remainingStock?: string;
 }

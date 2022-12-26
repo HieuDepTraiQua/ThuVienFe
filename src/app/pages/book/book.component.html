@@ -11,7 +11,7 @@
   (pageSizeChange)="onPageSizeChange($event)"
   [canAction]="isAdmin ? true : false"
   [canCreate]="isAdmin ? true : false"
-  [canSearch]="isAdmin ? true : false"
+  [canSearch]="true"
   [checked]="false"
   [showVote]="true"
 >
@@ -89,8 +89,9 @@
     <ng-template #headerTable >
       <div>Ngày phát hành</div>
     </ng-template>
-    <ng-template #colTable let-data let-col>
-      <div>{{data[col.key] | date: 'dd/MM/yyyy'}}</div>
+    <ng-template #cellTable let-data let-col>
+      <!-- <div>{{data[col.key] | date: 'dd/MM/yyyy'}}</div> -->
+      <div>{{data[col.key]}}</div>
     </ng-template>
   </app-col-table>
 
@@ -248,6 +249,46 @@
                       [nzLabel]="category.title"
                     ></nz-option>
                   </nz-select>
+                </div>
+              </div>
+              <div nz-col nzSpan="12">
+                <div
+                  nz-row
+                  class="input-label-custom"
+                  style="padding-bottom: 15px"
+                >
+                  Số tiền
+                </div>
+                <div nz-row>
+                  <input
+                    nz-col
+                    nz-input
+                    class="input-type-custom-2"
+                    formControlName="price"
+                    placeholder="Nhập giá tiền của quyển sách"
+                    onlyNumber
+                  />
+                </div>
+              </div>
+            </div>
+            <div nz-row>
+              <div nz-col nzSpan="12">
+                <div
+                  nz-row
+                  class="input-label-custom"
+                  style="padding-bottom: 15px"
+                >
+                  Hàng còn lại
+                </div>
+                <div nz-row>
+                  <input
+                    nz-col
+                    nz-input
+                    class="input-type-custom-2"
+                    formControlName="remainingStock"
+                    placeholder="Nhập số sách còn lại"
+                    onlyNumber
+                  />
                 </div>
               </div>
             </div>

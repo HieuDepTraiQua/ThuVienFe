@@ -66,6 +66,8 @@ export class BookComponent implements OnInit {
       publishYear: ['', [Validators.required]],
       pageOfBook: ['', [Validators.required]],
       description: [''],
+      price: [''],
+      remainingStock: [''],
       image: [null],
     });
 
@@ -154,6 +156,8 @@ export class BookComponent implements OnInit {
         publishYear: data.publishYear,
         pageOfBook: data.pageOfBook,
         description: data.description,
+        remainingStock: data.remainingStock,
+        price: data.price,
       });
     } else {
       this.formGroup.reset();
@@ -294,9 +298,9 @@ export class BookComponent implements OnInit {
   }
 
   submitVote(): void {
-    // const bookName = this.formGroup.get("nameBook")?.value;
+    const bookName = this.formGroup.get("nameBook")?.value;
     const review: Review = this.reviewFormGroup.getRawValue();
-    // review.bookName = bookName;
+    review.bookName = bookName;
     this.reviewService
       .create(review)
       .pipe(finalize(() => (this.isVisible = false)))
@@ -313,12 +317,12 @@ export class BookComponent implements OnInit {
   changeModalReview(): void {
     const bookName = this.formGroup.get("nameBook")?.value;
     this.isVisible = false;
-    this.reviewFormGroup.setValue({
-      bookName: bookName,
-      userId: '',
-      vote: '',
-      detail: ''
-    });
+    // this.reviewFormGroup.setValue({
+    //   bookName: bookName,
+    //   userId: '',
+    //   vote: '',
+    //   detail: ''
+    // });
     this.showModal('vote');    
   }
 }
