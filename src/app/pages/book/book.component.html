@@ -1,19 +1,21 @@
 <app-table-component
   [data]="books"
   *ngIf="!(isLoading$ | async)"
-  (createButton)="showModal('create')"
+  (createButton)="isAdmin ? showModal('create') : showElertCantCreate()"
   (editButtonClick)="showModal('update', $event)"
   (voteButtonClick)="showModal('vote', $event)"
+  (viewButtonClick)="showModal('view', $event)"
+  (purchaseButtonClick)="showModal('purchase', $event)"
   (deleteButtonClick)="showDeleteConfirm($event)"
   [pageIndex]="pageIndex"
   [totalPage]="totalPage"
   (pageIndexChange)="onPageChange($event)"
   (pageSizeChange)="onPageSizeChange($event)"
-  [canAction]="isAdmin ? true : false"
-  [canCreate]="isAdmin ? true : false"
   [canSearch]="true"
   [checked]="false"
   [showVote]="true"
+  [showDelete]="isAdmin ? true : false"
+  [showEdit]="isAdmin ? true : false"
 >
   <app-col-table
     header="nameBook"
@@ -45,7 +47,7 @@
     align="left"
     type="text"
     width="100px"
-    *ngIf = "isAdmin === true"
+    *ngIf="isAdmin === true"
   >
     <ng-template #headerTable let-col1>
       <div>Thể loại</div>
@@ -58,7 +60,7 @@
     align="left"
     type="text"
     width="100px"
-    *ngIf = "isAdmin === true"
+    *ngIf="isAdmin === true"
   >
     <ng-template #headerTable let-col1>
       <div>Mô tả</div>
@@ -71,7 +73,7 @@
     align="left"
     type="text"
     width="100px"
-    *ngIf = "isAdmin === true"
+    *ngIf="isAdmin === true"
   >
     <ng-template #headerTable let-col1>
       <div>Số trang</div>
@@ -84,14 +86,14 @@
     align="left"
     type="text"
     width="100px"
-    *ngIf = "isAdmin === true"
+    *ngIf="isAdmin === true"
   >
-    <ng-template #headerTable >
+    <ng-template #headerTable>
       <div>Ngày phát hành</div>
     </ng-template>
-    <ng-template #cellTable let-data let-col>
+    <ng-template let-data let-col>
       <!-- <div>{{data[col.key] | date: 'dd/MM/yyyy'}}</div> -->
-      <div>{{data[col.key]}}</div>
+      <!-- <div>{{col.key}}</div> -->
     </ng-template>
   </app-col-table>
 
@@ -124,7 +126,7 @@
   [nzWidth]="modalWidth"
 >
   <ng-template #modalContent>
-    <div *ngIf="isVote === false">
+    <div *ngIf="isVote === false && isPurchase === false">
       <form [formGroup]="formGroup">
         <div nz-row class="book-content">
           <div nz-col nzSpan="16">
@@ -133,7 +135,7 @@
                 <div
                   nz-row
                   class="input-label-custom"
-                  style="padding-bottom: 15px"
+                  style="padding-bottom: 15px"x
                 >
                   Tên sách
                 </div>
@@ -374,6 +376,37 @@
         </div>
       </form>
     </div>
+
+    <div *ngIf="isPurchase">
+      <form [formGroup]="reviewFormGroup">
+        <div nz-row style="padding-bottom: 20px">
+          <div nz-col nzSpan="8" class="input-label-custom">Đánh giá</div>
+          <nz-rate formControlName="vote" [(ngModel)]="vote"></nz-rate>
+          <span
+            *ngIf="vote"
+            class="ant-rate-text"
+            style="display: flex; align-items: center"
+            >{{ vote ? tooltips[vote - 1] : "" }}</span
+          >
+        </div>
+        <div nz-row>
+          <div nz-col nzSpan="8" class="input-label-custom">Chi tiết</div>
+          <textarea
+            nz-col
+            nzSpan="16"
+            nz-input
+            class="input-type-custom-textarea"
+            formControlName="detail"
+            placeholder="Nhập chi tiết đánh giá"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="isView">
+        <hr style="margin-top: 20px">
+        <div class="input-label-custom">Đánh giá</div>
+    </div>
   </ng-template>
 
   <ng-template #modalFooter>
@@ -383,18 +416,22 @@
       (clickButton)="handleCancel()"
       >Thoát</app-button-common
     >
-    <button
-      nz-button
-      nzType="default"
-      style="margin-right: 15px"
-      class="custom-button-default"
-      *ngIf="isVote === false"
-      (click)="changeModalReview()"
-    >
-      Đánh giá
-    </button>
-    <app-button-common (clickButton)="isVote ? submitVote() : handleOk()"
+    <!-- <div *ngIf="isView === true">
+      <button
+        nz-button
+        nzType="default"
+        style="margin-right: 15px"
+        class="custom-button-default"
+        (click)="changeModalReview()"
+      >
+        Mua sách
+      </button>
+    </div> -->
+    <div *ngIf="isView !== true">
+      <app-button-common (clickButton)="isVote ? submitVote() : handleOk()"
       >Xác nhận</app-button-common
     >
+    </div>
+
   </ng-template>
 </nz-modal>

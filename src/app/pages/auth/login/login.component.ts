@@ -55,8 +55,10 @@ export class LoginComponent implements OnInit {
     .subscribe(
       response => {
         const token = response.data.accessToken;
+        const userId = response.accountId;
         this.tokenStorage.saveToken(token);
         this.tokenStorage.saveUser(username);
+        this.tokenStorage.saveUserId(userId);
         this.roles = this.tokenStorage.getUser().roles;
         this.navigateToHome();
       },

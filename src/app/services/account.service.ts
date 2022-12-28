@@ -35,4 +35,8 @@ export class AccountService {
   getAllRole(): Observable<Role> {
     return this.http.get<Role>(ACCOUNT_URL + "/getrole");
   }
+
+  getById(id: string): Observable<Account> {
+    return this.http.get<Account>(`${ACCOUNT_URL}/findbyid?id=${id}`);
+  }
 }

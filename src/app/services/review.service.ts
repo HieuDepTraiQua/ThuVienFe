@@ -15,8 +15,8 @@ export class ReviewService {
     private http: HttpClient
   ) { }
   
-  getAllPaging(page: number, size: number): Observable<Review> {
-    return this.http.get<Review>(`${REVIEW_URL}?page=${page}&size=${size}`);
+  getAllPaging(page: number, size: number, bookName: string): Observable<Review> {
+    return this.http.get<Review>(`${REVIEW_URL}?page=${page}&size=${size}&bookName=${bookName}`);
   }
 
   create(review: Review): Observable<Review> {

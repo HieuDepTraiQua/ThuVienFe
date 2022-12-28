@@ -15,6 +15,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Review } from 'src/app/models/review.model';
 import { ReviewService } from 'src/app/services/review.service';
 import { Account } from 'src/app/models/account.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-book',
@@ -31,6 +32,7 @@ export class BookComponent implements OnInit {
   isLoading$ = new BehaviorSubject(false);
   isVisible = false;
   isUpdate = false;
+  isView = false;
   pageIndex = 1;
   totalPage = 1;
   pageSize = 10;
@@ -43,11 +45,16 @@ export class BookComponent implements OnInit {
   showImage = true;
   hideImage = false;
   isVote = false;
+  isPurchase = false;
   modalTitle: any;
   modalWidth = 1200;
   tooltips = ['Tệ kinh khủng', 'Không hay', 'Bình thường', 'Hay', 'Tuyệt vời'];
   vote = 3;
   createReview?: Review;
+  isDisable = false;
+  accountId ='';
+  bookName='';
+  reviews: any;
 
   constructor(
     private bookService: BookService,
@@ -82,6 +89,7 @@ export class BookComponent implements OnInit {
     if (this.accountRole === 'admin') {
       this.isAdmin = true;
     }
+    this.accountId = this.tokenService.getUserId();    
   }
 
   ngOnInit(): void {
@@ -110,6 +118,21 @@ export class BookComponent implements OnInit {
         }
       });
   }
+  
+  getAllReview(bookName: string): void {
+    this.isLoading$.next(true); // Hiển thị loading khi đang đang gửi request
+    this.reviewService
+      .getAllPaging(this.pageIndex - 1, this.pageSize, bookName)
+      .pipe(finalize(() => this.isLoading$.next(false))) // Ẩn loading khi request gọi thành công
+      .subscribe((response: any) => {
+        if (response && response.success) {
+          this.reviews = response.data;
+          this.totalPage = response.totalPage * 10;
+        } else {
+          console.log('Xảy ra lỗi');
+        }
+      });
+  }
 
   onDelete(data: Book): void {
     this.bookService
@@ -130,18 +153,41 @@ export class BookComponent implements OnInit {
       this.showImage = false;
       this.modalTitle = 'Tạo mới sách';
       this.modalWidth = 1200;
+      this.isView = false;
+      this.formGroup.enable();
     }
     if (type === 'update') {
       this.showImage = true;
       this.modalTitle = 'Cập nhật sách';
       this.modalWidth = 1200;
+      this.isView = false;
+      this.isUpdate = true;
+      this.formGroup.enable();
     }
     if (type === 'vote') {
       this.modalTitle = 'Đánh giá sách';
       this.modalWidth = 600;
       this.reviewFormGroup.reset();
       this.vote = 3;
+      this.isView = false;
+      this.isUpdate = false;
+      this.isVote = true;
+    }    
+    if (type === 'view') {
+      this.showImage = true;
+      this.modalTitle = 'Thông tin sách';
+      this.modalWidth = 1200;
+      this.formGroup.disable();
+      this.isUpdate = false;
+      this.isView = true;
+      this.isDisable = true;
+      console.log(this.formGroup.get("nameBook")?.value, "lozzz");
     }
+    if (type === "purchase"){
+      this.modalTitle = 'Mua sách';
+      this.modalWidth = 600;
+      this.isPurchase = true;
+    }    
     this.getAllAuthor();
     this.getAllCategory();
     this.isVisible = true;
@@ -159,16 +205,24 @@ export class BookComponent implements OnInit {
         remainingStock: data.remainingStock,
         price: data.price,
       });
+      if (type === 'view'){
+        this.getAllReview(this.formGroup.get("nameBook")?.value);
+      }
     } else {
       this.formGroup.reset();
     }
     if (type === 'vote') {
       this.isVote = true;
     }
+    if (type === 'purchase') {
+      this.isPurchase = true;
+    }
   }
 
   handleOk(): void {
     this.isVote = false;
+    this.isUpdate = false;
+    this.isPurchase = false;
     this.previews = '';
     this.url = '';
     this.hideImage = false;
@@ -176,9 +230,9 @@ export class BookComponent implements OnInit {
       console.log(this.formGroup, 'form invalid');
       return;
     }
-
     const book: Book = this.formGroup.getRawValue();
-
+    const releaseDate = moment(this.formGroup.get('publishYear')?.value).format("DD/MM/YYYY");
+    book.publishYear = releaseDate;
     if (this.isUpdate) {
       this.bookService
         .update(book, this.selectedBook.id)
@@ -212,6 +266,8 @@ export class BookComponent implements OnInit {
     this.previews = '';
     this.hideImage = false;
     this.isVote = false;
+    this.isUpdate = false;
+    this.isPurchase = false;
   }
 
   showDeleteConfirm(data: Book): void {
@@ -301,6 +357,7 @@ export class BookComponent implements OnInit {
     const bookName = this.formGroup.get("nameBook")?.value;
     const review: Review = this.reviewFormGroup.getRawValue();
     review.bookName = bookName;
+    review.userId = this.accountId;
     this.reviewService
       .create(review)
       .pipe(finalize(() => (this.isVisible = false)))
@@ -324,5 +381,9 @@ export class BookComponent implements OnInit {
     //   detail: ''
     // });
     this.showModal('vote');    
+  }
+
+  showElertCantCreate(): void {
+    this.toastrService.warning( "Bạn không có quyền sử dụng chức năng này", "Không thành công!")
   }
 }

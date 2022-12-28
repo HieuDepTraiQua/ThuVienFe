@@ -41,15 +41,19 @@ export class TableComponent implements OnInit, AfterContentInit {
   @Input() canExport = true;
   @Input() canCreate = true;
   @Input() canAction = true;
+  @Input() showView = true;
+  @Input() showPurchase = true;
   
 
   @Output() rowClick = new EventEmitter();
   @Output() pageIndexChange = new EventEmitter();
   @Output() pageSizeChange = new EventEmitter();
   @Output() editButtonClick = new EventEmitter();
+  @Output() viewButtonClick = new EventEmitter();
   @Output() deleteButtonClick = new EventEmitter();
   @Output() createButton = new EventEmitter();
   @Output() voteButtonClick = new EventEmitter();
+  @Output() purchaseButtonClick = new EventEmitter();
 
   @ContentChildren(ColTableComponent) columns!: QueryList<ColTableComponent>;
   @ContentChildren('headerTable', { descendants: true }) headerParentTmp!: QueryList<TemplateRef<any>>
@@ -83,9 +87,21 @@ export class TableComponent implements OnInit, AfterContentInit {
     }  
   }
 
+  onViewRow(data: any): void {
+    if (this.viewButtonClick) {
+      this.viewButtonClick.emit(data);
+    }  
+  }
+
   onVote(data: any): void {
     if (this.voteButtonClick) {
       this.voteButtonClick.emit(data);
+    }  
+  }
+
+  onPurchase(data: any): void {
+    if (this.purchaseButtonClick) {
+      this.purchaseButtonClick.emit(data);
     }  
   }
 
