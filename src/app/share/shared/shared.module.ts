@@ -20,6 +20,7 @@ import { AutofocusDirective } from './directive/autofocus.directive';
 import { OnlyNumberDirective } from './directive/only-number.directive';
 import { StatusPipe } from './pipe/status.pipe';
 import { StatusColorPipe } from './pipe/status-color.pipe';
+import { InputCurrenyDirective } from './directive/currency-input.directive';
 
 const icons: IconDefinition[] = [AccountBookFill, AlertOutline, AlertFill];
 
@@ -31,6 +32,7 @@ const EXPORTS = [
   TrimSpaceDirective,
   AutofocusDirective,
   OnlyNumberDirective,
+  InputCurrenyDirective,
   StatusPipe
 ]
 

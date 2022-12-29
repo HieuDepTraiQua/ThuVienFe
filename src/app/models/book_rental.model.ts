@@ -1,8 +1,10 @@
 export class BookRental {
     id!: string; 
-    libraryCardId!: string;
-    staffId!: string;
-    bookId!: string;
-    borrowedDate!: string;
-    returnDate!: string;
+    nameBook!: string;
+    author!: string;
+    image!: string;
+    price!: string;
+    quantity!: string;
+    userId!: string;
+    fullname!: string;
 }

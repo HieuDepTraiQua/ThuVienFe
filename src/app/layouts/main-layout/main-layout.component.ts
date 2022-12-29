@@ -9,7 +9,7 @@ import { TokenStorageService } from "src/app/_services/token-storage.service";
     styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-    isCollapsed = false;
+    isCollapsed = true;
     isDashboard = true;
     parentBreadcum: string = "Book";
     childBreadcum: string = "";

@@ -25,7 +25,8 @@
         <tr class="custom-row-header">
             <th *ngIf="checked" nzWidth="60px" [(nzChecked)]="allChecked" [nzLeft]="fixedColumn"
                 [nzIndeterminate]="indeterminate" (nzCheckedChange)="checkAll($event)" class="header-table-custom"></th>
-            <th *ngFor="let col of columns" [align]="col.align" class="header-table-custom">
+            <th *ngFor="let col of columns" [align]="col.align" class="header-table-custom"
+            [nzColumnKey]="col.key">
                 <span *ngIf="!col.headerTemplate">{{col.key | capitalizeText}}</span>
                 <ng-container *ngIf="col.headerTemplate" [ngTemplateOutlet]="col.headerTemplate"
                     [ngTemplateOutletContext]="{$implicit: col}">
@@ -48,12 +49,14 @@
                         }"></ng-container>
                 </td>
                 <td [nzRight]="fixedColumn" nzAlign="center" [style.visibility]="canAction ? 'visible' : 'hidden'">
+                    <img src="../../../assets/images/payment.png" style="height: 20px;" *ngIf="showPayment" (click)="onPayment(data)" class="cursor-pointer">
+                    <nz-divider nzType="vertical" *ngIf="showEdit && showPayment"></nz-divider>
                     <img src="../../../assets/images/detail.png" style="height: 20px;" *ngIf="showView" (click)="onViewRow(data)" class="cursor-pointer">
                     <nz-divider nzType="vertical" *ngIf="showView && showVote"></nz-divider>
                     <img src="../../../assets/images/icon-vote.png" style="height: 23px;" *ngIf="showVote" (click)="onVote(data)" class="cursor-pointer">
-                    <nz-divider nzType="vertical" *ngIf="showEdit && showDelete"></nz-divider>
+                    <nz-divider nzType="vertical" *ngIf="showVote && showPurchase"></nz-divider>
                     <img src="../../../assets/images/cart.png" style="height: 23px;" *ngIf="showPurchase" (click)="onPurchase(data)" class="cursor-pointer">
-                    <nz-divider nzType="vertical" *ngIf="showEdit && showDelete"></nz-divider>
+                    <nz-divider nzType="vertical" *ngIf="showEdit && showPurchase"></nz-divider>
                     <img src="../../../assets/images/icon-edit.png" style="height: 18px;" *ngIf="showEdit" (click)="onEditRow(data)" class="cursor-pointer">
                     <nz-divider nzType="vertical" *ngIf="showEdit && showDelete"></nz-divider>
                     <img src="../../../assets/images/icon-delete.png" style="height: 18px;" *ngIf="showDelete" (click)="onDeleteRow(data)" class="cursor-pointer">

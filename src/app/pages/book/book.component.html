@@ -18,6 +18,23 @@
   [showEdit]="isAdmin ? true : false"
 >
   <app-col-table
+    header="image"
+    key="image"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Bìa sách</div>
+    </ng-template>
+
+    <ng-template #cellTable let-data1="data" let-col="col">
+      <div>
+        <img [src]="[data1[col.key]]" style="width: 150px; height: 200px" />
+      </div>
+    </ng-template>
+  </app-col-table>
+  <app-col-table
     header="nameBook"
     key="nameBook"
     align="left"
@@ -91,28 +108,35 @@
     <ng-template #headerTable>
       <div>Ngày phát hành</div>
     </ng-template>
-    <ng-template let-data let-col>
-      <!-- <div>{{data[col.key] | date: 'dd/MM/yyyy'}}</div> -->
-      <!-- <div>{{col.key}}</div> -->
+    <ng-template #cellTable let-data1="data" let-col="col">
+      <div>{{ data1[col.key] | date : "dd/MM/yyyy" }}</div>
     </ng-template>
   </app-col-table>
 
   <app-col-table
-    header="image"
-    key="image"
+    header="price"
+    key="price"
     align="left"
     type="text"
     width="100px"
   >
     <ng-template #headerTable let-col1>
-      <div>Bìa sách</div>
+      <div>Số tiền (VNĐ)</div>
     </ng-template>
-
     <ng-template #cellTable let-data1="data" let-col="col">
-      <!-- <div>{{ <img [src] = "[col1.key]"> }}</div> -->
-      <div>
-        <img [src]="[data1[col.key]]" style="width: 150px; height: 200px" />
-      </div>
+      <div>{{ data1[col.key] | number : "1.0-2" }}</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="remainingStock"
+    key="remainingStock"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Số hàng còn sẵn</div>
     </ng-template>
   </app-col-table>
 </app-table-component>
@@ -135,7 +159,8 @@
                 <div
                   nz-row
                   class="input-label-custom"
-                  style="padding-bottom: 15px"x
+                  style="padding-bottom: 15px"
+                  x
                 >
                   Tên sách
                 </div>
@@ -269,6 +294,7 @@
                     formControlName="price"
                     placeholder="Nhập giá tiền của quyển sách"
                     onlyNumber
+                    appInputCurreny
                   />
                 </div>
               </div>
@@ -378,44 +404,61 @@
     </div>
 
     <div *ngIf="isPurchase">
-      <form [formGroup]="reviewFormGroup">
+      <form [formGroup]="purchaseFormGroup">
         <div nz-row style="padding-bottom: 20px">
-          <div nz-col nzSpan="8" class="input-label-custom">Đánh giá</div>
-          <nz-rate formControlName="vote" [(ngModel)]="vote"></nz-rate>
-          <span
-            *ngIf="vote"
-            class="ant-rate-text"
-            style="display: flex; align-items: center"
-            >{{ vote ? tooltips[vote - 1] : "" }}</span
-          >
-        </div>
-        <div nz-row>
-          <div nz-col nzSpan="8" class="input-label-custom">Chi tiết</div>
-          <textarea
-            nz-col
-            nzSpan="16"
-            nz-input
-            class="input-type-custom-textarea"
-            formControlName="detail"
-            placeholder="Nhập chi tiết đánh giá"
-          ></textarea>
+          <div nz-col nzSpan="8" class="input-label-custom">Số lượng mua</div>
+          <nz-input-number
+            formControlName="quantity"
+            [nzMin]="1"
+            [nzMax]="100"
+            [nzStep]="1"
+            class="input-number-type-custom"
+            onlyNumber
+          ></nz-input-number>
         </div>
       </form>
     </div>
 
     <div *ngIf="isView">
-        <hr style="margin-top: 20px">
-        <div class="input-label-custom">Đánh giá</div>
+      <hr style="margin-top: 20px; max-height: 20px" />
+      <div class="input-label-custom">Đánh giá</div>
+      <div class="content-wrapper">
+        <div class="review-content" *ngFor="let review of reviews">
+          <div>
+            <span style="padding-right: 20px; font-weight: 700">{{
+              review.nameOfCustomer
+            }}</span>
+            <nz-rate
+              [ngModel]="review.vote"
+              [nzAllowHalf]="false"
+              [nzDisabled]="true"
+            ></nz-rate>
+            <div>{{ review.detail }}</div>
+            <hr class="custom-hr" />
+          </div>
+        </div>
+      </div>
     </div>
   </ng-template>
 
   <ng-template #modalFooter>
-    <app-button-common
+    <!-- <app-button-common
       [okButton]="false"
       style="margin-right: 10px"
       (clickButton)="handleCancel()"
       >Thoát</app-button-common
-    >
+    > -->
+    <div>
+      <button
+        nz-button
+        nzType="default"
+        style="margin-right: 15px"
+        class="custom-button-default"
+        (click)="handleCancel()"
+      >
+        Thoát
+      </button>
+    </div>
     <!-- <div *ngIf="isView === true">
       <button
         nz-button
@@ -427,11 +470,13 @@
         Mua sách
       </button>
     </div> -->
-    <div *ngIf="isView !== true">
+    <div *ngIf="isView !== true && isPurchase !== true">
       <app-button-common (clickButton)="isVote ? submitVote() : handleOk()"
-      >Xác nhận</app-button-common
-    >
+        >Xác nhận</app-button-common
+      >
     </div>
-
+    <div *ngIf="isPurchase">
+      <app-button-common (clickButton)="submitPurchse()">Mua</app-button-common>
+    </div>
   </ng-template>
 </nz-modal>

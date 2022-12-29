@@ -1,172 +1,130 @@
-  <app-table-component
-    [data]="bookRentals"
-    *ngIf="!(isLoading$ | async)"
-    (createButton)="showModal()"
-    (editButtonClick)="showModal($event)"
-    (deleteButtonClick)="showDeleteConfirm($event)"
-    [pageIndex]="pageIndex"
-    [totalPage]="totalPage"
-    (pageIndexChange)="onPageChange($event)"
-    (pageSizeChange)="onPageSizeChange($event)"
+<div class="payment-content">
+  <span style="font-weight: 700"
+    >Giỏ hàng hiện tại có {{ amount }} đơn hàng với tổng đơn hàng có giá trị là
+    <span style="color: rgb(41, 133, 232)">{{ price }} VNĐ</span></span
   >
-    <app-col-table
-      header="bookName"
-      key="bookName"
-      align="left"
-      type="text"
-      width="100px"
-    >
-      <ng-template #headerTable let-col1>
-        <div>Tên sách</div>
-      </ng-template>
-    </app-col-table>
-
-    <app-col-table
-      header="libraryCard"
-      key="libraryCard"
-      align="left"
-      type="text"
-      width="100px"
-    >
-      <ng-template #headerTable let-col1>
-        <div>Thẻ thư viện</div>
-      </ng-template>
-    </app-col-table>
-
-    <app-col-table
-      header="staffName"
-      key="staffName"
-      align="left"
-      type="text"
-      width="100px"
-    >
-      <ng-template #headerTable let-col1>
-        <div>Nhân viên</div>
-      </ng-template>
-    </app-col-table>
-
-    <app-col-table
-      header="borrowedDate"
-      key="borrowedDate"
-      align="left"
-      type="text"
-      width="100px"
-    >
-      <ng-template #headerTable let-col1>
-        <div>Ngày mượn</div>
-      </ng-template>
-    </app-col-table>
-
-    <app-col-table
-      header="returnDate"
-      key="returnDate"
-      align="left"
-      type="text"
-      width="100px"
-    >
-      <ng-template #headerTable let-col1>
-        <div>Ngày trả</div>
-      </ng-template>
-    </app-col-table>
-  </app-table-component>
-
-  <nz-modal
-    [(nzVisible)]="isVisible"
-    [nzTitle]="modalTitle"
-    [nzContent]="modalContent"
-    [nzFooter]="modalFooter"
-    (nzOnCancel)="handleCancel()"
-    [nzWidth]="600"
+</div>
+<app-table-component
+  [data]="bookRentals"
+  *ngIf="!(isLoading$ | async)"
+  (editButtonClick)="showModal('update', $event)"
+  (paymentButtonClick)="showPaymentConfirm($event)"
+  (deleteButtonClick)="showDeleteConfirm($event)"
+  [pageIndex]="pageIndex"
+  [totalPage]="totalPage"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+  [showView]="false"
+  [showPurchase]="false"
+  [checked]="false"
+  [showPayment]="true"
+>
+  <app-col-table
+    header="image"
+    key="image"
+    align="left"
+    type="text"
+    width="100px"
   >
-    <ng-template #modalTitle>{{
-      !isUpdate ? "Tạo mới" : "Cập nhật"
-    }}</ng-template>
-
-    <ng-template #modalContent>
-      <form [formGroup]="formGroup">
-        <!-- <div nz-row>
-          <div nz-col nzSpan="8" class="input-label-custom">Tên sách</div>
-          <input nz-col nzSpan="16" nz-input  class="input-type-custom" formControlName="bookId" />
-
-          <nz-select
-            formControlName="bookId"
-            class="select-type-custom"
-            [nzPlaceHolder]="'Chọn tên sách'"
-            (ngModelChange)="onBook()" 
-          >
-            <nz-option
-              *ngFor="let book of books"
-              [nzValue]="book.id"
-              [nzLabel]="book.nameBook"
-            ></nz-option>
-          </nz-select>
-        </div> -->
-
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Thẻ thư viện</div>
-          <nz-select
-            formControlName="libraryCardId"
-            class="select-type-custom"
-            [nzPlaceHolder]="'Chọn thẻ thư viện'"
-            (ngModelChange)="onCard()"
-          >
-            <nz-option
-              *ngFor="let card of cards"
-              [nzValue]="card.id"
-              [nzLabel]="card.idCard"
-            ></nz-option>
-          </nz-select>
-        </div>
-
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Nhân viên</div>
-          <nz-select
-            formControlName="staffId"
-            class="select-type-custom"
-            [nzPlaceHolder]="'Chọn nhân viên'"
-            (ngModelChange)="onStaff()"
-          >
-            <nz-option
-              *ngFor="let staff of staffs"
-              [nzValue]="staff.id"
-              [nzLabel]="staff.name"
-            ></nz-option>
-          </nz-select>
-        </div>
-
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Ngày mượn</div>
-          <nz-date-picker
-            [nzPlaceHolder]="'Chọn ngày mượn'"
-            class="date-type-custom"
-            nzFormat="dd/MM/yyyy"
-            formControlName="borrowedDate"
-            style="width: 66%"
-          >
-          </nz-date-picker>
-        </div>
-
-        <div nz-row class="mt-4">
-          <div nz-col nzSpan="8" class="input-label-custom">Ngày trả</div>
-          <nz-date-picker
-            [nzPlaceHolder]="'Chọn ngày trả'"
-            class="date-type-custom"
-            nzFormat="dd/MM/yyyy"
-            formControlName="returnDate"
-            style="width: 66%"
-          >
-          </nz-date-picker>
-        </div>
-      </form>
+    <ng-template #headerTable let-col1>
+      <div>Bìa sách</div>
     </ng-template>
 
-    <ng-template #modalFooter>
-      <app-button-common
-        [okButton]="false"
-        style="margin-right: 10px"
-        (clickButton)="handleCancel()"
-        >Thoát</app-button-common
-      >
-      <app-button-common (clickButton)="handleOk()">Tạo mới</app-button-common>
+    <ng-template #cellTable let-data1="data" let-col="col">
+      <div>
+        <img [src]="[data1[col.key]]" style="width: 150px; height: 200px" />
+      </div>
     </ng-template>
-  </nz-modal>
+  </app-col-table>
+
+  <app-col-table
+    header="nameBook"
+    key="nameBook"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Tên sách</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="author"
+    key="author"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Tác giả</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="price"
+    key="price"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Số tiền (VNĐ)</div>
+    </ng-template>
+    <ng-template #cellTable let-data1="data" let-col="col">
+      <div>{{ data1[col.key] | number : "1.0-2" }}</div>
+    </ng-template>
+  </app-col-table>
+
+  <app-col-table
+    header="quantity"
+    key="quantity"
+    align="left"
+    type="text"
+    width="100px"
+  >
+    <ng-template #headerTable let-col1>
+      <div>Số lượng</div>
+    </ng-template>
+  </app-col-table>
+</app-table-component>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>{{
+    !isUpdate ? "Tạo mới" : "Cập nhật đơn hàng"
+  }}</ng-template>
+
+  <ng-template #modalContent>
+    <form [formGroup]="formGroup">
+
+      <div nz-row class="mt-4">
+        <div nz-col nzSpan="8" class="input-label-custom">Số lượng</div>
+        <nz-input-number
+        formControlName="quantity"
+        [nzMin]="1"
+        [nzMax]="100"
+        [nzStep]="1"
+        class="input-number-type-custom"
+        onlyNumber
+      ></nz-input-number>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <app-button-common
+      [okButton]="false"
+      style="margin-right: 10px"
+      (clickButton)="handleCancel()"
+      >Thoát</app-button-common
+    >
+    <app-button-common (clickButton)="handleOk()">Xác nhận</app-button-common>
+  </ng-template>
+</nz-modal>

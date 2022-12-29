@@ -63,6 +63,14 @@ const routes: Routes = [
           ),
           canActivate : [AuthGuardService]
       },
+      {
+        path: 'rental',
+        loadChildren: () =>
+          import('./pages/book-rental/book-rental.module').then(
+            (m) => m.BookRentalModule
+          ),
+          canActivate : [AuthGuardService]
+      },
     ],
   },
   

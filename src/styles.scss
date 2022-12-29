@@ -46,6 +46,17 @@ $color: #2ea5e0;
     background-color: $background-color;
 }
 
+.input-number-type-custom{
+
+}
+
+
+::ng-deep{
+    .ant-input-number{
+        width: 365px;
+    }
+}
+
 .select-type-custom {
     width: 66%;
     height: 35px;

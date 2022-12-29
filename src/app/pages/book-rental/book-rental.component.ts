@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { BookRental } from 'src/app/models/book_rental.model';
 import { BookRentalService } from 'src/app/services/book_rental.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
   selector: 'app-book-rental',
@@ -31,44 +32,59 @@ export class BookRentalComponent implements OnInit {
   pageIndex = 1;
   totalPage = 1;
   pageSize = 10;
+  accountId ='';
+  price: any;
+  modalTitle='';
+  amount=0;
   constructor(
     private bookRentalService: BookRentalService ,
     private cardService: CardService ,
     private bookService: BookService ,
     private staffService: SatffService ,
     private fb: FormBuilder,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private tokenService: TokenStorageService,
   ) { 
     this.formGroup = this.fb.group({
-      libraryCardId: ['', [Validators.required]],
-      staffId: ['', [Validators.required]],
-      bookId: ['', [Validators.required]],
-      borrowedDate: ['', [Validators.required]],
-      returnDate: ['', [Validators.required]],
+      quantity: ['']
     })
+    this.accountId = this.tokenService.getUserId();
   }
 
   ngOnInit(): void {
     this.getAllBookRental();
-    // this.getAllBook();
-    this.getAllCard();
-    this.getAllStaff();
   }
 
   getAllBookRental(): void {
     this.isLoading$.next(true); // Hiển thị loading khi đang đang gửi request
-    this.bookRentalService.getAllPaging(this.pageIndex-1, this.pageSize)
+    this.bookRentalService.getAllPaging(this.pageIndex-1, this.pageSize, this.accountId)
       .pipe(finalize(() => this.isLoading$.next(false))) // Ẩn loading khi request gọi thành công
       .subscribe((response: any) => {
         if (response && response.success) {
           this.bookRentals = response.data;
+          this.getTotalPrice();
           this.totalPage = response.totalPage  * 10;
+          this.amount = this.bookRentals.length;
           this.bookRentals = this.bookRentals.map(bookRental => {
            return {
              ...bookRental,
              checked: false
            }
          });
+        } else {
+          console.log('Xảy ra lỗi');
+        }
+      })
+  }
+
+  getTotalPrice(): void {
+    this.isLoading$.next(true); // Hiển thị loading khi đang đang gửi request
+    this.bookRentalService.getTotalPrice(this.accountId)
+      .pipe(finalize(() => this.isLoading$.next(false))) // Ẩn loading khi request gọi thành công
+      .subscribe((response: any) => {
+        if (response && response.success) {
+          this.price = response.data;
+          this.price = this.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         } else {
           console.log('Xảy ra lỗi');
         }
@@ -83,18 +99,16 @@ export class BookRentalComponent implements OnInit {
       });
   }
   
-  showModal(data?: BookRental): void {
+  showModal(type: string, data?: BookRental): void {
     this.isVisible = true;
-  
+    if (type === 'update') {
+      this.modalTitle = 'Cập nhật sách';
+    }
     if (data) {
       this.isUpdate = true;
       this.selectedBookRental = data;
       this.formGroup.patchValue({
-        libraryCardId: data.libraryCardId,
-        staffId: data.staffId,
-        bookId: data.bookId,
-        borrowedDate: data.borrowedDate,
-        returnDate: data.returnDate
+        quantity: data.quantity,
       })
     } else {
       this.isUpdate = false;
@@ -141,6 +155,17 @@ export class BookRentalComponent implements OnInit {
     });
   }
 
+  showPaymentConfirm(data: BookRental): void {
+    this.modal.confirm({
+      nzTitle: 'Bạn có chắc chắn muốn thanh toán ' + data.quantity + ' quyển ' + data.nameBook,
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: false,
+      nzOnOk: () => this.onDelete(data),
+      nzCancelText: 'No'
+    });
+  }
+
   onPageChange(pageNumber: number): void {
     this.pageIndex = pageNumber;
     this.getAllBookRental();    
@@ -150,53 +175,5 @@ export class BookRentalComponent implements OnInit {
     this.pageSize = pageSize;
     this.getAllBookRental();
   }
-
-  getAllCard(): void {
-    this.cardService.getAll()
-      .pipe(finalize(() => this.isLoading$.next(false)))
-      .subscribe((response: any) => {
-        if(response && response.success){
-          this.cards = response.data;
-        }else{
-          console.log('Error!');
-        }
-      });
-  }
-
-  onCard(): void {
-    this.getAllCard();
-  }
-
-  getAllStaff(): void {
-    this.staffService.getAll()
-      .pipe(finalize(() => this.isLoading$.next(false)))
-      .subscribe((response: any) => {
-        if(response && response.success){
-          this.staffs = response.data;
-        }else{
-          console.log('Error!');
-        }
-      });
-  }
-
-  onStaff(): void {
-    this.getAllStaff();
-  }
-
-  // getAllBook(): void {
-  //   this.bookService.getAll()
-  //     .pipe(finalize(() => this.isLoading$.next(false)))
-  //     .subscribe((response: any) => {
-  //       if(response && response.success){
-  //         this.books = response.data;
-  //       }else{
-  //         console.log('Error!');
-  //       }
-  //     });
-  // }
-
-  // onBook(): void {
-  //   this.getAllBook();
-  // }
 
 }

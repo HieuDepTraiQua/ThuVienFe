@@ -5,3 +5,19 @@
 .custom-button-default{
   border-radius: 5px;
 }
+
+.content-wrapper{
+  height: 150px;
+  overflow-y: scroll;
+}
+.custom-hr{
+  border-width: 0 0 1px;
+  $color: skyblue;
+  color: $color;
+  border-image: linear-gradient(
+    90deg,
+    rgba($color, 0),
+    rgba($color, 1) 50%,
+    rgba($color, 0) 100%) 0 0 100%;
+  border-style: solid;
+}

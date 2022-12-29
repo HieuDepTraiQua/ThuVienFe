@@ -43,6 +43,7 @@ export class TableComponent implements OnInit, AfterContentInit {
   @Input() canAction = true;
   @Input() showView = true;
   @Input() showPurchase = true;
+  @Input() showPayment = false;
   
 
   @Output() rowClick = new EventEmitter();
@@ -54,6 +55,7 @@ export class TableComponent implements OnInit, AfterContentInit {
   @Output() createButton = new EventEmitter();
   @Output() voteButtonClick = new EventEmitter();
   @Output() purchaseButtonClick = new EventEmitter();
+  @Output() paymentButtonClick = new EventEmitter();
 
   @ContentChildren(ColTableComponent) columns!: QueryList<ColTableComponent>;
   @ContentChildren('headerTable', { descendants: true }) headerParentTmp!: QueryList<TemplateRef<any>>
@@ -102,6 +104,12 @@ export class TableComponent implements OnInit, AfterContentInit {
   onPurchase(data: any): void {
     if (this.purchaseButtonClick) {
       this.purchaseButtonClick.emit(data);
+    }  
+  }
+
+  onPayment(data: any): void {
+    if (this.paymentButtonClick) {
+      this.paymentButtonClick.emit(data);
     }  
   }
 

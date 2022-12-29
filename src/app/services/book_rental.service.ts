@@ -19,19 +19,22 @@ export class BookRentalService {
     return this.http.get<BookRental>(RENTAL_URL + "/getall");
   }
 
-  getAllPaging(page: number, size: number): Observable<BookRental> {
-    return this.http.get<BookRental>(`${RENTAL_URL}/get?page=${page}&size=${size}`);
+  getAllPaging(page: number, size: number, userId: string): Observable<BookRental> {
+    return this.http.get<BookRental>(`${RENTAL_URL}?page=${page}&size=${size}&id=${userId}`);
+  }
+  getTotalPrice(userId: string): Observable<BookRental> {
+    return this.http.get<BookRental>(`${RENTAL_URL}/price?id=${userId}`);
   }
 
   create(rental: BookRental): Observable<BookRental> {
-    return this.http.post<BookRental>(RENTAL_URL + "/create", rental);
+    return this.http.post<BookRental>(RENTAL_URL, rental);
   }
 
   update(rental: BookRental, id: string): Observable<BookRental> {
-    return this.http.put<BookRental>(`${RENTAL_URL}/update/${id}`, rental);
+    return this.http.put<BookRental>(`${RENTAL_URL}/${id}`, rental);
   }
 
   delete(id: string): Observable<BookRental> {
-    return this.http.delete<BookRental>(`${RENTAL_URL}/delete/${id}`);
+    return this.http.delete<BookRental>(`${RENTAL_URL}/${id}`);
   }
 }

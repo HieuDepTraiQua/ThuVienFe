@@ -9,6 +9,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { SharedModule } from 'src/app/share/shared/shared.module';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 export const routes: Routes = [
   {
@@ -30,7 +31,8 @@ export const routes: Routes = [
     NzSelectModule,
     NzDatePickerModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    NzInputNumberModule
   ]
 })
 export class BookRentalModule { }

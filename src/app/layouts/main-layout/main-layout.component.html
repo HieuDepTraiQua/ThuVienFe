@@ -1,9 +1,25 @@
 <nz-layout class="full-height">
-  <nz-sider nzTheme="light" nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null" nzWidth="300px"
-    style="box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px 5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
+  <nz-sider
+    nzTheme="light"
+    nzCollapsible
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+    nzWidth="300px"
+    style="
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px 5px,
+        rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    "
+  >
     <div class="logo" (click)="navigateLink('dashboard')">
-      <img class="cursor-pointer" [src]="isCollapsed ? '../../../assets/images/logo.png' : '../../../assets/images/logo.png'"
-        style="height: 40px;">
+      <img
+        class="cursor-pointer"
+        [src]="
+          isCollapsed
+            ? '../../../assets/images/logo.png'
+            : '../../../assets/images/logo.png'
+        "
+        style="height: 40px"
+      />
     </div>
 
     <nz-divider></nz-divider>
@@ -15,11 +31,27 @@
         <img src="../../../assets/images/author2.png" class="menu-icon" *ngIf="isSelected('/author')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Tác giả</span>
       </li> -->
-      <li nz-menu-item [nzSelected]="isSelected('/category')" routerLink="/category" routerLinkActive="active" 
-        class="mt-2" *ngIf = "isAdmin">
-        <img src="../../../assets/images/category.png" class="menu-icon" *ngIf="!isSelected('/category')">
-        <img src="../../../assets/images/category2.png" class="menu-icon" *ngIf="isSelected('/category')">
-        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Thể loại</span>
+      <li
+        nz-menu-item
+        [nzSelected]="isSelected('/category')"
+        routerLink="/category"
+        routerLinkActive="active"
+        class="mt-2"
+        *ngIf="isAdmin"
+      >
+        <img
+          src="../../../assets/images/category.png"
+          class="menu-icon"
+          *ngIf="!isSelected('/category')"
+        />
+        <img
+          src="../../../assets/images/category2.png"
+          class="menu-icon"
+          *ngIf="isSelected('/category')"
+        />
+        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text"
+          >Thể loại</span
+        >
       </li>
       <!-- <li nz-menu-item [nzSelected]="isSelected('/staff')" routerLink="/staff" routerLinkActive="active" 
         class="mt-2" *ngIf = "isAdmin">
@@ -33,58 +65,123 @@
         <img src="../../../assets/images/menu-icon-my-page2.png" class="menu-icon" *ngIf="isSelected('/card')">
         <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Thẻ thư viện</span>
       </li> -->
-      <li nz-menu-item [nzSelected]="isSelected('/book')" routerLink="/book" routerLinkActive="active" 
-        class="mt-2">
-        <img src="../../../assets/images/book.png" class="menu-icon" *ngIf="!isSelected('/book')">
-        <img src="../../../assets/images/book2.png" class="menu-icon" *ngIf="isSelected('/book')">
-        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Sách</span>
+      <li
+        nz-menu-item
+        [nzSelected]="isSelected('/book')"
+        routerLink="/book"
+        routerLinkActive="active"
+        class="mt-2"
+      >
+        <img
+          src="../../../assets/images/book.png"
+          class="menu-icon"
+          *ngIf="!isSelected('/book')"
+        />
+        <img
+          src="../../../assets/images/book2.png"
+          class="menu-icon"
+          *ngIf="isSelected('/book')"
+        />
+        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text"
+          >Sách</span
+        >
       </li>
-      <li nz-menu-item [nzSelected]="isSelected('/account')" routerLink="/account" routerLinkActive="active" 
-      class="mt-2" *ngIf = "isAdmin">
-      <img src="../../../assets/images/icon-people.png" class="menu-icon" *ngIf="!isSelected('/account')">
-      <img src="../../../assets/images/icon-people-white.png" class="menu-icon" *ngIf="isSelected('/account')">
-      <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Tài khoản</span>
-    </li>
-      <!-- <li nz-menu-item [nzSelected]="isSelected('/rental')" routerLink="/rental" routerLinkActive="active" 
-        class="mt-2" *ngIf = "isAdmin">
-        <img src="../../../assets/images/rental.png" class="menu-icon" *ngIf="!isSelected('/rental')">
-        <img src="../../../assets/images/rental2.png" class="menu-icon" *ngIf="isSelected('/rental')">
-        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text">Mượn sách</span>
-      </li> -->
+      <li
+        nz-menu-item
+        [nzSelected]="isSelected('/account')"
+        routerLink="/account"
+        routerLinkActive="active"
+        class="mt-2"
+        *ngIf="isAdmin"
+      >
+        <img
+          src="../../../assets/images/icon-people.png"
+          class="menu-icon"
+          *ngIf="!isSelected('/account')"
+        />
+        <img
+          src="../../../assets/images/icon-people-white.png"
+          class="menu-icon"
+          *ngIf="isSelected('/account')"
+        />
+        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text"
+          >Tài khoản</span
+        >
+      </li>
+      <li
+        nz-menu-item
+        [nzSelected]="isSelected('/rental')"
+        routerLink="/rental"
+        routerLinkActive="active"
+        class="mt-2"
+      >
+        <img
+          src="../../../assets/images/cart-icon.png"
+          class="menu-icon"
+          style="width: 22px"
+          *ngIf="!isSelected('/rental')"
+        />
+        <img
+          src="../../../assets/images/cart-activate.png"
+          style="width: 22px"
+          class="menu-icon"
+          *ngIf="isSelected('/rental')"
+        />
+        <span *ngIf="!isCollapsed" class="margin-content custom-menu-text"
+          >Giỏ hàng</span
+        >
+      </li>
     </ul>
-
   </nz-sider>
   <nz-layout class="full-height">
     <nz-header>
       <div class="header-custom">
-        <i class="trigger" nz-icon [nzType]="isCollapsed ? 'double-right' : 'double-left'"
-          (click)="isCollapsed = !isCollapsed"></i>
+        <i
+          class="trigger"
+          nz-icon
+          [nzType]="isCollapsed ? 'double-right' : 'double-left'"
+          (click)="isCollapsed = !isCollapsed"
+        ></i>
 
         <i nz-icon nzType="align-left" nzTheme="outline" class="pl-2"></i>
-        <nz-divider nzType="vertical" style="color: black;"></nz-divider>
+        <nz-divider nzType="vertical" style="color: black"></nz-divider>
         <nz-breadcrumb>
-          <nz-breadcrumb-item class="breadcum-custom parent-breadcum">{{parentBreadcum}}</nz-breadcrumb-item>
+          <nz-breadcrumb-item class="breadcum-custom parent-breadcum">{{
+            parentBreadcum
+          }}</nz-breadcrumb-item>
           <!-- <nz-breadcrumb-item class="breadcum-custom child-breadcum">{{childBreadcum}}</nz-breadcrumb-item> -->
         </nz-breadcrumb>
 
         <div class="profile">
           <div class="bell cursor-pointer">
             <nz-badge [nzCount]="1">
-              <img src="../../../assets//images/bell.png">
+              <img src="../../../assets//images/bell.png" />
             </nz-badge>
           </div>
-          <div class="avatar cursor-pointer" nz-dropdown [nzDropdownMenu]="menu">
-            <img src="../../../assets//images/avatar-removebg-preview.png">
+          <div
+            class="avatar cursor-pointer"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <img src="../../../assets//images/avatar-removebg-preview.png" />
           </div>
 
           <div class="setting cursor-pointer" (click)="signOut()">
-            <i nz-icon nzType="logout" nzTheme="outline" style="font-size: 1.5rem;"></i>
+            <i
+              nz-icon
+              nzType="logout"
+              nzTheme="outline"
+              style="font-size: 1.5rem"
+            ></i>
           </div>
         </div>
       </div>
     </nz-header>
     <nz-content class="full-height">
-      <div [class.inner-content]="!isDashboard" [class.dashboard-content]="isDashboard">
+      <div
+        [class.inner-content]="!isDashboard"
+        [class.dashboard-content]="isDashboard"
+      >
         <ng-content></ng-content>
       </div>
     </nz-content>
