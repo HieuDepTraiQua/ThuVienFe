@@ -55,11 +55,11 @@ export class BookComponent implements OnInit {
   vote = 3;
   createReview?: Review;
   isDisable = false;
-  accountId ='';
-  bookName='';
-  reviews:  any[] = [];
+  accountId = '';
+  bookName = '';
+  reviews: any[] = [];
   isReviewData = false;
-  amt = 11154321;
+  test = {name: "test", vote: "2.5"};
 
   constructor(
     private bookService: BookService,
@@ -70,7 +70,7 @@ export class BookComponent implements OnInit {
     private toastrService: ToastrService,
     private tokenService: TokenStorageService,
     private reviewService: ReviewService,
-    private rentalService: BookRentalService,
+    private rentalService: BookRentalService
   ) {
     this.formGroup = this.fb.group({
       nameBook: ['', [Validators.required]],
@@ -88,7 +88,7 @@ export class BookComponent implements OnInit {
       userId: [''],
       vote: [''],
       detail: [''],
-      bookName: ['']
+      bookName: [''],
     });
 
     this.purchaseFormGroup = this.fb.group({
@@ -105,12 +105,6 @@ export class BookComponent implements OnInit {
       this.isAdmin = true;
     }
     this.accountId = this.tokenService.getUserId();
-    
-
-
-    const test =this.amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    console.log(test, "loz");
-    
   }
 
   ngOnInit(): void {
@@ -139,7 +133,7 @@ export class BookComponent implements OnInit {
         }
       });
   }
-  
+
   getAllReview(bookName: string): void {
     this.isLoading$.next(true); // Hiển thị loading khi đang đang gửi request
     this.reviewService
@@ -148,7 +142,7 @@ export class BookComponent implements OnInit {
       .subscribe((response: any) => {
         if (response && response.success) {
           this.reviews = response.data;
-          if (this.reviews.length > 0){
+          if (this.reviews.length !== 0) {
             this.isReviewData = true;
           }
           this.totalPage = response.totalPage * 10;
@@ -196,7 +190,7 @@ export class BookComponent implements OnInit {
       this.isView = false;
       this.isUpdate = false;
       this.isVote = true;
-    }    
+    }
     if (type === 'view') {
       this.showImage = true;
       this.modalTitle = 'Thông tin sách';
@@ -205,14 +199,13 @@ export class BookComponent implements OnInit {
       this.isUpdate = false;
       this.isView = true;
       this.isDisable = true;
-      console.log(this.formGroup.get("nameBook")?.value, "lozzz");
     }
-    if (type === "purchase"){
+    if (type === 'purchase') {
       this.modalTitle = 'Mua sách';
       this.modalWidth = 600;
       this.isPurchase = true;
       this.purchaseFormGroup.reset();
-    }        
+    }
     this.getAllAuthor();
     this.getAllCategory();
     this.isVisible = true;
@@ -229,10 +222,10 @@ export class BookComponent implements OnInit {
         description: data.description,
         remainingStock: data.remainingStock,
         price: data.price,
-        image: data.image
+        image: data.image,
       });
-      if (type === 'view'){
-        this.getAllReview(this.formGroup.get("nameBook")?.value);        
+      if (type === 'view') {
+        this.getAllReview(this.formGroup.get('nameBook')?.value);
       }
     } else {
       this.formGroup.reset();
@@ -247,7 +240,6 @@ export class BookComponent implements OnInit {
 
   handleOk(): void {
     this.isVote = false;
-    this.isUpdate = false;
     this.isPurchase = false;
     this.previews = '';
     this.url = '';
@@ -261,7 +253,7 @@ export class BookComponent implements OnInit {
     }
     const book: Book = this.formGroup.getRawValue();
     // const releaseDate = moment(this.formGroup.get('publishYear')?.value).format("DD/MM/YYYY");
-    const price = this.formGroup.get('price')?.value.split(',').join("");
+    const price = this.formGroup.get('price')?.value.split(',').join('');
     book.price = price;
     if (this.isUpdate) {
       this.bookService
@@ -386,10 +378,12 @@ export class BookComponent implements OnInit {
   }
 
   submitVote(): void {
-    const bookName = this.formGroup.get("nameBook")?.value;
+    const bookName = this.formGroup.get('nameBook')?.value;
+    const vote = this.reviewFormGroup.get('vote')?.value;
     const review: Review = this.reviewFormGroup.getRawValue();
     review.bookName = bookName;
-    review.userId = this.accountId;
+    review.vote = vote.toString();
+    review.userId = this.accountId;    
     this.reviewService
       .create(review)
       .pipe(finalize(() => (this.isVisible = false)))
@@ -404,7 +398,7 @@ export class BookComponent implements OnInit {
   }
 
   changeModalReview(): void {
-    const bookName = this.formGroup.get("nameBook")?.value;
+    const bookName = this.formGroup.get('nameBook')?.value;
     this.isVisible = false;
     // this.reviewFormGroup.setValue({
     //   bookName: bookName,
@@ -412,18 +406,21 @@ export class BookComponent implements OnInit {
     //   vote: '',
     //   detail: ''
     // });
-    this.showModal('vote');    
+    this.showModal('vote');
   }
 
   showElertCantCreate(): void {
-    this.toastrService.warning( "Bạn không có quyền sử dụng chức năng này", "Không thành công!")
+    this.toastrService.warning(
+      'Bạn không có quyền sử dụng chức năng này',
+      'Không thành công!'
+    );
   }
 
   submitPurchse(): void {
-    const nameBook = this.formGroup.get("nameBook")?.value;
-    const author = this.formGroup.get("author")?.value;
-    const image = this.formGroup.get("image")?.value;
-    const price = this.formGroup.get("price")?.value;
+    const nameBook = this.formGroup.get('nameBook')?.value;
+    const author = this.formGroup.get('author')?.value;
+    const image = this.formGroup.get('image')?.value;
+    const price = this.formGroup.get('price')?.value;
     const rental: BookRental = this.purchaseFormGroup.getRawValue();
     rental.userId = this.accountId;
     rental.nameBook = nameBook;
@@ -433,13 +430,24 @@ export class BookComponent implements OnInit {
     this.rentalService
       .create(rental)
       .pipe(finalize(() => (this.isVisible = false)))
-      .subscribe((response: any) => {
-        if (response && response.success === true) {
-          this.getAllBook();
-          this.toastrService.success('Thêm vào giỏ hàng', 'Thành công');
-        } else {
-          this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
+      .subscribe(
+        (response: any) => {
+          if (response && response.success === true) {
+            this.getAllBook();
+            this.toastrService.success('Thêm vào giỏ hàng', 'Thành công');
+          } else {
+            this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
+          }
+        },
+        (error: any) => {
+          console.log(error, 'error');
+          if (error && error.error.message.includes("No more in stock")) {
+            this.toastrService.error(
+              'Vui lòng thử lại',
+              'Hàng không có đủ trong kho'
+            );
+          }
         }
-      });
+      );
   }
 }

@@ -421,8 +421,8 @@
 
     <div *ngIf="isView">
       <hr style="margin-top: 20px; max-height: 20px" />
-      <div class="input-label-custom">Đánh giá</div>
-      <div class="content-wrapper">
+      <div class="input-label-custom" style="margin-bottom: 20px;">Đánh giá</div>
+      <div class="content-wrapper" *ngIf="isReviewData">
         <div class="review-content" *ngFor="let review of reviews">
           <div>
             <span style="padding-right: 20px; font-weight: 700">{{
@@ -437,6 +437,9 @@
             <hr class="custom-hr" />
           </div>
         </div>
+      </div>
+      <div *ngIf="isReviewData !== true">
+        <span style="font-weight: 600;">Quyển sách này hiện tại chưa có bình luận nào</span>
       </div>
     </div>
   </ng-template>
