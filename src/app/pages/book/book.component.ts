@@ -391,6 +391,7 @@ export class BookComponent implements OnInit {
         if (response && response.success === true) {
           this.getAllBook();
           this.toastrService.success('Thêm mới bình luận', 'Thành công');
+          this.isVote = false;
         } else {
           this.toastrService.error('Vui lòng thử lại', 'Đã có lỗi xảy ra');
         }

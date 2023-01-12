@@ -146,7 +146,7 @@ export class BookRentalComponent implements OnInit {
 
   showDeleteConfirm(data: BookRental): void {
     this.modal.confirm({
-      nzTitle: 'Bạn có chắc chắn muốn xóa?',
+      nzTitle: 'Bạn có chắc chắn muốn xóa khỏi giỏ hàng sản phẩm này?',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
